@@ -1,0 +1,3690 @@
+<!-- 立体图形特训 · 单文件离线版：双击即可使用，无需服务器、无需联网 -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#FDF6F8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="立体图形特训">
+<title>立体图形特训 · 行测空间推理</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20512%20512%22%3E%0A%20%20%3Crect%20width%3D%22512%22%20height%3D%22512%22%20rx%3D%22112%22%20fill%3D%22%23FDEFF3%22%2F%3E%0A%20%20%3Cg%20transform%3D%22translate(256%20268)%22%3E%0A%20%20%20%20%3Cpolygon%20points%3D%220%2C-120%20104%2C-60%20104%2C60%200%2C120%20-104%2C60%20-104%2C-60%22%20fill%3D%22%23FFF%22%20stroke%3D%22%23D95C83%22%20stroke-width%3D%2214%22%20stroke-linejoin%3D%22round%22%2F%3E%0A%20%20%20%20%3Cpolygon%20points%3D%220%2C-120%20104%2C-60%200%2C0%20-104%2C-60%22%20fill%3D%22%23F4C0CE%22%20stroke%3D%22%23D95C83%22%20stroke-width%3D%2214%22%20stroke-linejoin%3D%22round%22%2F%3E%0A%20%20%20%20%3Cpolygon%20points%3D%220%2C0%20104%2C-60%20104%2C60%200%2C120%22%20fill%3D%22%23FADCE4%22%20stroke%3D%22%23D95C83%22%20stroke-width%3D%2214%22%20stroke-linejoin%3D%22round%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%3C%2Fsvg%3E%0A">
+<style>
+/* ============================================================
+ *  立体图形特训 · UI 主题
+ *  风格：iOS 原生（大标题、卡片、圆角、无边框按钮）+ 淡粉色
+ * ========================================================== */
+:root{
+  --pink-50:#FFF8FA;
+  --pink-100:#FDEFF3;
+  --pink-200:#FADCE4;
+  --pink-300:#F4C0CE;
+  --pink-400:#EE9DB4;
+  --pink-500:#E57E9C;
+  --pink-600:#D95C83;
+  --pink-700:#B8466A;
+  --ink:#3A2C33;
+  --ink-2:#6E5A63;
+  --ink-3:#A3909A;
+  --line:#F0DDE4;
+  --card:#FFFFFF;
+  --bg:#FDF6F8;
+  --ok:#4FB39B;
+  --ok-bg:#E6F6F1;
+  --bad:#EE7A8C;
+  --bad-bg:#FDECEF;
+  --warn:#E9A54C;
+  --radius:18px;
+  --radius-s:12px;
+  --shadow:0 2px 10px rgba(200,150,170,.10), 0 10px 30px rgba(200,150,170,.07);
+  --shadow-s:0 1px 4px rgba(200,150,170,.12);
+  --safe-b:env(safe-area-inset-bottom, 0px);
+  --font:-apple-system, BlinkMacSystemFont, "SF Pro SC", "PingFang SC", "Helvetica Neue", "Microsoft YaHei", sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+body{overscroll-behavior-y:none}
+button{font-family:inherit;font-size:inherit;color:inherit;border:none;background:none;cursor:pointer}
+h1,h2,h3,h4{margin:0;font-weight:600;letter-spacing:-.01em}
+p{margin:0}
+svg{display:block}
+.fig{display:block;margin:0 auto}
+
+/* ---------- 导航 ---------- */
+.nav{position:sticky;top:0;z-index:40;background:rgba(253,246,248,.86);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:.5px solid var(--line)}
+.nav-inner{max-width:720px;margin:0 auto;padding:14px 20px 10px}
+.nav h1{font-size:26px;font-weight:700;letter-spacing:-.02em}
+.nav-sub{font-size:13px;color:var(--ink-3);margin-top:2px}
+
+#main{max-width:720px;margin:0 auto;padding:16px 16px calc(96px + var(--safe-b));}
+
+/* ---------- TabBar ---------- */
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:50;display:flex;background:rgba(255,255,255,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:.5px solid var(--line);padding-bottom:var(--safe-b)}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 0 7px;color:var(--ink-3);font-size:11px;font-weight:500;transition:color .18s}
+.tab .ti{font-size:21px;line-height:1;filter:grayscale(.35);opacity:.75;transition:transform .2s}
+.tab.active{color:var(--pink-600)}
+.tab.active .ti{filter:none;opacity:1;transform:translateY(-1px) scale(1.08)}
+
+/* ---------- 卡片 ---------- */
+.card{background:var(--card);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);margin-bottom:14px}
+.card.tight{padding:12px}
+.card-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.card-title h3{font-size:16px}
+.card-title .more{font-size:13px;color:var(--pink-600)}
+.sec-title{font-size:13px;font-weight:600;color:var(--ink-3);letter-spacing:.04em;margin:18px 4px 8px}
+.hint{font-size:12.5px;color:var(--ink-3);line-height:1.6}
+.divider{height:.5px;background:var(--line);margin:12px 0}
+
+/* ---------- 按钮 ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:11px 18px;border-radius:14px;background:var(--pink-500);color:#fff;font-weight:600;font-size:15px;transition:transform .12s,opacity .12s;box-shadow:0 4px 14px rgba(229,126,156,.28)}
+.btn:active{transform:scale(.97)}
+.btn.ghost{background:var(--pink-100);color:var(--pink-700);box-shadow:none}
+.btn.line{background:#fff;color:var(--pink-600);border:1px solid var(--pink-200);box-shadow:none}
+.btn.sm{padding:7px 13px;font-size:13.5px;border-radius:11px}
+.btn.block{display:flex;width:100%}
+.btn[disabled]{opacity:.45;pointer-events:none}
+.btn-row{display:flex;gap:10px}
+.btn-row>*{flex:1}
+
+/* ---------- 今日任务 ---------- */
+.hero{background:linear-gradient(135deg,#FFF1F5 0%,#FDE7EE 55%,#F9D8E4 100%);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-bottom:14px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-30px;top:-30px;width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,.35)}
+.hero h2{font-size:19px;margin-bottom:2px}
+.hero p{font-size:12.5px;color:var(--ink-2)}
+.hero-stats{display:flex;gap:14px;margin-top:14px;position:relative}
+.hero-stat{flex:1;background:rgba(255,255,255,.72);border-radius:14px;padding:9px 10px;text-align:center}
+.hero-stat b{display:block;font-size:19px;font-weight:700;color:var(--pink-700);line-height:1.2}
+.hero-stat span{font-size:11px;color:var(--ink-3)}
+
+/* 进度环 */
+.ring{width:56px;height:56px;flex:none}
+.ring circle{fill:none;stroke-width:6;stroke-linecap:round}
+.ring .bg{stroke:rgba(255,255,255,.75)}
+.ring .fg{stroke:var(--pink-500);transition:stroke-dashoffset .5s}
+.ring-wrap{display:flex;align-items:center;gap:14px;margin-top:14px;position:relative}
+.ring-wrap .txt{flex:1}
+.ring-wrap .txt b{font-size:15px;display:block}
+.ring-wrap .txt span{font-size:12px;color:var(--ink-2)}
+.ring-num{font-size:11px;font-weight:700;fill:var(--pink-700)}
+
+/* ---------- 题型网格 ---------- */
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.type-card{background:#fff;border-radius:15px;padding:13px;box-shadow:var(--shadow-s);text-align:left;transition:transform .14s;border:1.5px solid transparent}
+.type-card:active{transform:scale(.97)}
+.type-card.on{border-color:var(--pink-300);background:var(--pink-50)}
+.type-card .ico{font-size:22px;line-height:1}
+.type-card b{display:block;font-size:14.5px;margin-top:6px}
+.type-card .d{font-size:11.5px;color:var(--ink-3);margin-top:1px}
+.type-card .rate{margin-top:8px;height:4px;border-radius:3px;background:var(--pink-100);overflow:hidden}
+.type-card .rate i{display:block;height:100%;background:var(--pink-400);border-radius:3px}
+.type-card .rate-n{font-size:10.5px;color:var(--ink-3);margin-top:4px}
+
+/* ---------- 答题 ---------- */
+.sheet{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;flex-direction:column}
+.sheet[hidden]{display:none}
+.sheet-head{padding:calc(env(safe-area-inset-top,0px) + 10px) 16px 8px;background:rgba(253,246,248,.94);backdrop-filter:blur(20px);border-bottom:.5px solid var(--line)}
+.sheet-head .q-progress{height:5px;background:var(--pink-100);border-radius:3px;overflow:hidden;margin:8px 0 6px}
+.sheet-head .q-bar{height:100%;width:0;background:linear-gradient(90deg,var(--pink-400),var(--pink-600));border-radius:3px;transition:width .3s}
+.sheet-head .q-meta{display:flex;justify-content:space-between;font-size:12.5px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.icon-btn{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--pink-100);color:var(--pink-700);font-size:14px;flex:none}
+.sheet-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 16px calc(76px + var(--safe-b));max-width:720px;width:100%;margin:0 auto}
+.sheet-foot{padding:10px 16px calc(14px + var(--safe-b));background:rgba(255,255,255,.94);backdrop-filter:blur(20px);border-top:.5px solid var(--line)}
+.sheet-foot .inner{max-width:720px;margin:0 auto}
+
+.q-stem{background:#fff;border-radius:var(--radius);padding:14px;box-shadow:var(--shadow);margin-bottom:14px}
+.q-stem .qt{font-size:14.5px;font-weight:600;margin-bottom:10px;line-height:1.5}
+.q-stem .figwrap{background:var(--pink-50);border-radius:12px;padding:10px;display:flex;justify-content:center;align-items:center;min-height:100px}
+.q-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.tag{font-size:11px;padding:3px 9px;border-radius:8px;background:var(--pink-100);color:var(--pink-700);font-weight:500}
+.tag.g{background:var(--ok-bg);color:var(--ok)}
+.tag.o{background:#FFF3E4;color:var(--warn)}
+
+.opts{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.opt{background:#fff;border-radius:15px;padding:10px;box-shadow:var(--shadow-s);border:2px solid transparent;transition:transform .12s,border-color .2s;position:relative;overflow:hidden}
+.opt:active{transform:scale(.98)}
+.opt .lb{position:absolute;left:8px;top:8px;width:20px;height:20px;border-radius:6px;background:var(--pink-100);color:var(--pink-700);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.opt .fig{margin-top:4px}
+.opt.right{border-color:var(--ok);background:var(--ok-bg)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.opt.right .lb{background:var(--ok);color:#fff}
+.opt.wrong .lb{background:var(--bad);color:#fff}
+.opt.dim{opacity:.5}
+
+.explain{background:#fff;border-radius:var(--radius);padding:15px;box-shadow:var(--shadow);margin-top:14px;white-space:pre-wrap;font-size:13.5px;line-height:1.75;color:var(--ink-2)}
+.explain b{color:var(--ink)}
+.explain .eh{font-size:14.5px;font-weight:700;color:var(--pink-700);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.badge{font-size:11px;padding:2px 8px;border-radius:7px;font-weight:600}
+.badge.ok{background:var(--ok-bg);color:var(--ok)}
+.badge.bad{background:var(--bad-bg);color:var(--bad)}
+.mrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+
+/* ---------- 技巧 ---------- */
+.m-card{background:#fff;border-radius:15px;box-shadow:var(--shadow-s);margin-bottom:10px;overflow:hidden}
+.m-head{display:flex;align-items:center;gap:10px;padding:13px 14px}
+.m-head .lv{width:26px;height:26px;border-radius:9px;background:var(--pink-100);color:var(--pink-700);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none}
+.m-head .t{flex:1;min-width:0}
+.m-head .t b{font-size:15px;display:block}
+.m-head .t span{font-size:11.5px;color:var(--ink-3)}
+.m-head .ar{color:var(--ink-3);font-size:13px;transition:transform .25s}
+.m-card.open .m-head .ar{transform:rotate(90deg)}
+.m-body{padding:0 14px 14px;font-size:13.5px;color:var(--ink-2);line-height:1.72}
+.m-body[hidden]{display:none}
+.m-body h4{font-size:12.5px;color:var(--pink-700);margin:12px 0 5px;letter-spacing:.02em}
+.m-body ol,.m-body ul{margin:0;padding-left:19px}
+.m-body li{margin-bottom:5px}
+.chant{background:var(--pink-50);border-left:3px solid var(--pink-300);border-radius:0 10px 10px 0;padding:9px 12px;font-size:13.5px;color:var(--pink-700);font-weight:600;margin:8px 0}
+.trap{background:#FFF8EC;border-left:3px solid var(--warn);border-radius:0 10px 10px 0;padding:9px 12px;font-size:12.5px;color:#8a6534;margin:8px 0}
+.demo{background:var(--pink-50);border-radius:12px;padding:12px;text-align:center;margin:10px 0}
+
+/* ---------- 图表 ---------- */
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.bar-row .n{width:74px;font-size:12.5px;color:var(--ink-2);flex:none;text-align:right}
+.bar-row .bar{flex:1;height:9px;background:var(--pink-100);border-radius:5px;overflow:hidden}
+.bar-row .bar i{display:block;height:100%;border-radius:5px;background:linear-gradient(90deg,var(--pink-300),var(--pink-500))}
+.bar-row .v{width:52px;font-size:12px;color:var(--ink-3);font-variant-numeric:tabular-nums;text-align:right}
+.bar-row.weak .bar i{background:linear-gradient(90deg,#F5B0A0,var(--bad))}
+.chart{width:100%;height:auto}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.kpi{background:var(--pink-50);border-radius:13px;padding:10px 6px;text-align:center}
+.kpi b{display:block;font-size:18px;color:var(--pink-700);font-weight:700;line-height:1.25;font-variant-numeric:tabular-nums}
+.kpi span{font-size:11px;color:var(--ink-3)}
+
+/* ---------- 列表 ---------- */
+.row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:.5px solid var(--line)}
+.row:last-child{border-bottom:none}
+.row .r-main{flex:1;min-width:0}
+.row .r-main b{font-size:14.5px;display:block;font-weight:500}
+.row .r-main span{font-size:12px;color:var(--ink-3)}
+.row .r-side{font-size:12.5px;color:var(--ink-3);flex:none;text-align:right}
+.chip{display:inline-block;font-size:11px;padding:2px 8px;border-radius:7px;background:var(--pink-100);color:var(--pink-700);margin-right:5px}
+.chip.b{background:var(--bad-bg);color:var(--bad)}
+.chip.g{background:var(--ok-bg);color:var(--ok)}
+.chip.w{background:#FFF3E4;color:var(--warn)}
+
+.empty{text-align:center;padding:44px 20px;color:var(--ink-3);font-size:13.5px}
+.empty .e-ico{font-size:40px;margin-bottom:10px;opacity:.55}
+
+/* ---------- 实验室 ---------- */
+.lab-stage{background:linear-gradient(160deg,#FFF9FB,#FCEFF4);border-radius:var(--radius);padding:8px;box-shadow:var(--shadow);margin-bottom:12px;position:relative}
+.lab-stage canvas{width:100%;height:300px;display:block;touch-action:none;cursor:grab}
+.lab-stage canvas:active{cursor:grabbing}
+.lab-tip{position:absolute;left:12px;bottom:10px;font-size:11px;color:var(--ink-3);background:rgba(255,255,255,.8);padding:3px 9px;border-radius:8px;pointer-events:none}
+.seg{display:flex;background:var(--pink-100);border-radius:11px;padding:3px;margin-bottom:12px;gap:2px}
+.seg button{flex:1;padding:7px 4px;border-radius:9px;font-size:13px;color:var(--ink-2);font-weight:500;transition:.18s}
+.seg button.on{background:#fff;color:var(--pink-700);font-weight:600;box-shadow:var(--shadow-s)}
+.slider-row{display:flex;align-items:center;gap:10px;margin:10px 0}
+.slider-row label{font-size:12.5px;color:var(--ink-2);width:66px;flex:none}
+.slider-row input[type=range]{flex:1;accent-color:var(--pink-500);height:22px}
+.slider-row .val{font-size:12px;color:var(--ink-3);width:40px;text-align:right;font-variant-numeric:tabular-nums}
+.net-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.net-item{background:#fff;border-radius:12px;padding:8px 4px;text-align:center;box-shadow:var(--shadow-s);transition:transform .13s}
+.net-item:active{transform:scale(.96)}
+.net-item.on{border:2px solid var(--pink-400)}
+.net-item .fig{margin:0 auto}
+.net-item span{font-size:10px;color:var(--ink-3);display:block;margin-top:4px}
+.vox-pick{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.vox-pick button{padding:8px 4px;border-radius:10px;background:#fff;box-shadow:var(--shadow-s);font-size:12px}
+.vox-pick button.on{background:var(--pink-500);color:#fff}
+.plane-btns{display:flex;flex-wrap:wrap;gap:6px}
+
+/* ---------- 弹层 ---------- */
+.modal{position:fixed;inset:0;z-index:200;display:flex;align-items:flex-end;justify-content:center}
+.modal[hidden]{display:none}
+.modal-mask{position:absolute;inset:0;background:rgba(60,40,50,.32);backdrop-filter:blur(2px)}
+.modal-box{position:relative;width:100%;max-width:640px;background:var(--bg);border-radius:22px 22px 0 0;max-height:88vh;display:flex;flex-direction:column;animation:up .26s cubic-bezier(.2,.9,.3,1)}
+@keyframes up{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:15px 16px 10px;border-bottom:.5px solid var(--line)}
+.modal-head h3{font-size:17px}
+.modal-body{padding:14px 16px calc(24px + var(--safe-b));overflow-y:auto}
+
+.toast{position:fixed;left:50%;bottom:calc(90px + var(--safe-b));transform:translateX(-50%);background:rgba(58,44,51,.93);color:#fff;padding:9px 18px;border-radius:20px;font-size:13.5px;z-index:300;animation:fade .25s;max-width:80%;text-align:center}
+.toast[hidden]{display:none}
+@keyframes fade{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+/* ---------- 表单 ---------- */
+.field{margin-bottom:12px}
+.field label{display:block;font-size:12.5px;color:var(--ink-2);margin-bottom:5px;font-weight:500}
+.field input,.field textarea,.field select{width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:#fff;font-size:14px;font-family:inherit;color:var(--ink);outline:none}
+.field input:focus,.field textarea:focus{border-color:var(--pink-300)}
+.field textarea{min-height:72px;resize:vertical}
+.field .row-in{display:flex;gap:8px}
+
+/* ---------- 更新中心 ---------- */
+.src-row{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:.5px solid var(--line)}
+.src-row:last-child{border-bottom:none}
+.src-row .m{flex:1;min-width:0}
+.src-row .m b{font-size:13.5px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.src-row .m span{font-size:11.5px;color:var(--ink-3)}
+.switch{width:44px;height:26px;border-radius:14px;background:var(--pink-200);position:relative;transition:.22s;flex:none}
+.switch i{position:absolute;left:3px;top:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.22s;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.switch.on{background:var(--pink-500)}
+.switch.on i{left:21px}
+.ver{font-size:11px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+
+/* ---------- 动画 ---------- */
+@keyframes pop{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.anim{animation:pop .32s cubic-bezier(.2,.9,.3,1) both}
+@media (min-width:700px){
+  .opts{grid-template-columns:repeat(4,1fr)}
+}
+
+/* ---------- 自适应补充 ---------- */
+svg{max-width:100%;height:auto}
+.opt svg,.q-stem .figwrap svg{max-height:180px;width:auto}
+.opt{max-height:230px;display:flex;align-items:center;justify-content:center;padding-top:26px}
+.opt .fig{margin:0}
+.net-item svg{margin:0 auto}
+#vBox svg{margin:0 auto}
+.lab-stage svg{margin:0 auto}
+@media (max-width:360px){
+  .nav h1{font-size:22px}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .opts{gap:8px}
+}
+
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="nav" id="nav">
+    <div class="nav-inner">
+      <h1 id="navTitle">立体图形特训</h1>
+      <div class="nav-sub" id="navSub">行测空间推理专项</div>
+    </div>
+  </header>
+
+  <main id="main"></main>
+
+  <nav class="tabbar" id="tabbar">
+    <button class="tab active" data-tab="practice"><span class="ti">✏️</span><span>练习</span></button>
+    <button class="tab" data-tab="lab"><span class="ti">🧊</span><span>实验室</span></button>
+    <button class="tab" data-tab="methods"><span class="ti">📖</span><span>技巧</span></button>
+    <button class="tab" data-tab="review"><span class="ti">📊</span><span>错题</span></button>
+    <button class="tab" data-tab="me"><span class="ti">⚙️</span><span>我的</span></button>
+  </nav>
+</div>
+
+<!-- 答题页 -->
+<div class="sheet" id="quizSheet" hidden>
+  <div class="sheet-head">
+    <button class="icon-btn" id="quizClose">✕</button>
+    <div class="q-progress"><div class="q-bar" id="qBar"></div></div>
+    <div class="q-meta"><span id="qIndex">1/20</span><span id="qTimer">00:00</span></div>
+  </div>
+  <div class="sheet-body" id="quizBody"></div>
+  <div class="sheet-foot" id="quizFoot"></div>
+</div>
+
+<!-- 通用弹层 -->
+<div class="modal" id="modal" hidden>
+  <div class="modal-mask" data-close></div>
+  <div class="modal-box">
+    <div class="modal-head"><h3 id="modalTitle"></h3><button class="icon-btn" data-close>✕</button></div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<script>
+
+;
+/* ===== core3d.js ===== */
+/* ============================================================
+ *  core3d.js  ——  轻量 3D 内核（零依赖，Canvas 2D 光栅化）
+ *  提供：向量/矩阵、正交相机、画家算法渲染器、平面切割求截面
+ *  同时支持浏览器全局与 Node（便于用脚本校验题目答案正确性）
+ * ========================================================== */
+(function (root) {
+  'use strict';
+
+  /* ---------- 向量 ---------- */
+  const V = {
+    add: (a, b) => [a[0] + b[0], a[1] + b[1], a[2] + b[2]],
+    sub: (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]],
+    mul: (a, s) => [a[0] * s, a[1] * s, a[2] * s],
+    dot: (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2],
+    cross: (a, b) => [
+      a[1] * b[2] - a[2] * b[1],
+      a[2] * b[0] - a[0] * b[2],
+      a[0] * b[1] - a[1] * b[0]
+    ],
+    len: (a) => Math.hypot(a[0], a[1], a[2]),
+    norm(a) { const l = Math.hypot(a[0], a[1], a[2]) || 1; return [a[0] / l, a[1] / l, a[2] / l]; },
+    eq: (a, b, eps = 1e-6) => Math.abs(a[0] - b[0]) < eps && Math.abs(a[1] - b[1]) < eps && Math.abs(a[2] - b[2]) < eps
+  };
+
+  /* ---------- 4x4 矩阵（行主序，列向量：p' = M·p） ---------- */
+  const M4 = {
+    id: () => [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+    mul(A, B) {
+      const C = new Array(16);
+      for (let r = 0; r < 4; r++) {
+        for (let c = 0; c < 4; c++) {
+          C[r * 4 + c] = A[r * 4] * B[c] + A[r * 4 + 1] * B[4 + c] + A[r * 4 + 2] * B[8 + c] + A[r * 4 + 3] * B[12 + c];
+        }
+      }
+      return C;
+    },
+    apply(m, p) {
+      return [
+        m[0] * p[0] + m[1] * p[1] + m[2] * p[2] + m[3],
+        m[4] * p[0] + m[5] * p[1] + m[6] * p[2] + m[7],
+        m[8] * p[0] + m[9] * p[1] + m[10] * p[2] + m[11]
+      ];
+    },
+    /** 只作用于方向向量（忽略平移） */
+    dir(m, p) {
+      return [
+        m[0] * p[0] + m[1] * p[1] + m[2] * p[2],
+        m[4] * p[0] + m[5] * p[1] + m[6] * p[2],
+        m[8] * p[0] + m[9] * p[1] + m[10] * p[2]
+      ];
+    },
+    trans(x, y, z) { const m = M4.id(); m[3] = x; m[7] = y; m[11] = z; return m; },
+    /** 绕任意轴（过原点，单位方向 axis）旋转 ang 弧度 */
+    rotAxis(axis, ang) {
+      const [x, y, z] = V.norm(axis), c = Math.cos(ang), s = Math.sin(ang), t = 1 - c;
+      return [
+        t * x * x + c, t * x * y - s * z, t * x * z + s * y, 0,
+        t * x * y + s * z, t * y * y + c, t * y * z - s * x, 0,
+        t * x * z - s * y, t * y * z + s * x, t * z * z + c, 0,
+        0, 0, 0, 1
+      ];
+    },
+    /** 绕过点 o、方向 dir 的轴旋转 */
+    rotAbout(o, dir, ang) {
+      return M4.mul(M4.mul(M4.trans(o[0], o[1], o[2]), M4.rotAxis(dir, ang)), M4.trans(-o[0], -o[1], -o[2]));
+    },
+    scale(s) { const m = M4.id(); m[0] = m[5] = m[10] = s; return m; }
+  };
+
+  /* ---------- 相机：正交投影（行测题全部是等距/正交画法） ---------- */
+  class Camera {
+    constructor(opts = {}) {
+      this.yaw = opts.yaw != null ? opts.yaw : -Math.PI * 0.75;  // 绕 z
+      this.pitch = opts.pitch != null ? opts.pitch : 0.62;        // 仰角
+      this.zoom = opts.zoom != null ? opts.zoom : 1;
+      this.update();
+    }
+    update() {
+      const cp = Math.cos(this.pitch), sp = Math.sin(this.pitch);
+      const cy = Math.cos(this.yaw), sy = Math.sin(this.yaw);
+      // f: 由场景指向相机
+      this.f = V.norm([cp * cy, cp * sy, sp]);
+      this.right = V.norm([-sy, cy, 0]);
+      this.up = V.cross(this.f, this.right);
+    }
+    /** 3D -> 屏幕（x 右, y 下），返回 [x, y, depth] */
+    project(p, size, cx, cy) {
+      const x = V.dot(p, this.right) * size * this.zoom + cx;
+      const y = -V.dot(p, this.up) * size * this.zoom + cy;
+      const d = V.dot(p, this.f);
+      return [x, y, d];
+    }
+    /** 方向向量的屏幕投影增量（正交投影下为线性） */
+    projectDir(d, size) {
+      return [V.dot(d, this.right) * size * this.zoom, -V.dot(d, this.up) * size * this.zoom];
+    }
+    rotateBy(dYaw, dPitch) {
+      this.yaw += dYaw;
+      this.pitch = Math.max(-1.45, Math.min(1.45, this.pitch + dPitch));
+      this.update();
+    }
+  }
+
+  /* ---------- 面（支持面内图案贴图） ---------- */
+  /**
+   * face = {
+   *   center: [x,y,z],      // 面心
+   *   U: [x,y,z],           // 面内 u 轴 * 边长（局部坐标 -0.5..0.5 乘上它）
+   *   V: [x,y,z],           // 面内 v 轴 * 边长
+   *   normal: [x,y,z],
+   *   color: '#fff',
+   *   pattern: 图案名,
+   *   patternColor, opacity, stroke
+   * }
+   */
+  function facePoly(face, half = 0.5) {
+    const c = face.center, U = face.U, Vv = face.V;
+    const s = (u, v) => V.add(c, V.add(V.mul(U, u * 2 * half), V.mul(Vv, v * 2 * half)));
+    return [s(-0.5, -0.5), s(0.5, -0.5), s(0.5, 0.5), s(-0.5, 0.5)];
+  }
+
+  /** 画家算法排序：按面心深度 */
+  function sortFaces(faces, cam) {
+    return faces.map((f) => ({ f, d: V.dot(f.center, cam.f) })).sort((a, b) => a.d - b.d).map((o) => o.f);
+  }
+
+  /* ---------- 平面切割：求多边形与平面交集（用于截面题） ---------- */
+  /**
+   * poly: 3D 点数组（凸/凹多边形，按序）
+   * plane: {p0, n}
+   * 返回交点数组（按在多边形边界上的顺序）
+   */
+  function intersectPolygonPlane(pts, plane) {
+    const out = [];
+    const sd = (p) => V.dot(V.sub(p, plane.p0), plane.n);
+    for (let i = 0; i < pts.length; i++) {
+      const a = pts[i], b = pts[(i + 1) % pts.length];
+      const da = sd(a), db = sd(b);
+      if (Math.abs(da) < 1e-9) out.push(a.slice());
+      if ((da > 0 && db < 0) || (da < 0 && db > 0)) {
+        const t = da / (da - db);
+        out.push(V.add(a, V.mul(V.sub(b, a), t)));
+      }
+    }
+    return dedupe(out);
+  }
+  function dedupe(pts, eps = 1e-6) {
+    const r = [];
+    for (const p of pts) {
+      if (!r.some((q) => V.len(V.sub(p, q)) < eps)) r.push(p);
+    }
+    return r;
+  }
+  /** 把 3D 共面点集合按逆时针排成凸/简单多边形（用于截面形状） */
+  function orderCoplanar(pts, n) {
+    if (pts.length < 3) return pts;
+    const c = pts.reduce((a, p) => V.add(a, p), [0, 0, 0]).map((x) => x / pts.length);
+    let ex = V.norm(V.sub(pts[0], c));
+    let ey = V.norm(V.cross(n, ex));
+    return pts.slice().sort((a, b) => {
+      const da = V.sub(a, c), db = V.sub(b, c);
+      return Math.atan2(V.dot(da, ey), V.dot(da, ex)) - Math.atan2(V.dot(db, ey), V.dot(db, ex));
+    });
+  }
+  /** 多边形面积（3D，已排序） */
+  function polyArea3(pts, n) {
+    let s = [0, 0, 0];
+    for (let i = 0; i < pts.length; i++) s = V.add(s, V.cross(pts[i], pts[(i + 1) % pts.length]));
+    return Math.abs(V.dot(s, n)) / 2;
+  }
+
+  /* ---------- 单位立方体（边长 1，中心 c） ---------- */
+  function unitCubeFaces(c, opt = {}) {
+    const [x, y, z] = c;
+    const col = opt.color || '#ffffff';
+    const half = 0.5;
+    const mk = (n, U, Vv) => ({
+      center: V.add(c, V.mul(n, half)),
+      U: V.mul(U, 1), V: V.mul(Vv, 1),
+      normal: n, color: col, edge: opt.edge !== false
+    });
+    return [
+      mk([0, 0, 1], [1, 0, 0], [0, 1, 0]),   // 上
+      mk([0, 0, -1], [1, 0, 0], [0, -1, 0]), // 下
+      mk([1, 0, 0], [0, 1, 0], [0, 0, -1]),  // 东(+x)
+      mk([-1, 0, 0], [0, -1, 0], [0, 0, -1]),// 西(-x)
+      mk([0, 1, 0], [1, 0, 0], [0, 0, -1]),  // 南(+y)
+      mk([0, -1, 0], [-1, 0, 0], [0, 0, -1]) // 北(-y)
+    ];
+  }
+
+  const API = { V, M4, Camera, facePoly, sortFaces, intersectPolygonPlane, orderCoplanar, polyArea3, unitCubeFaces, dedupe };
+  if (typeof module !== 'undefined' && module.exports) module.exports = API;
+  root.Core3D = API;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+;
+;
+/* ===== cube.js ===== */
+/* ============================================================
+ *  cube.js  ——  立方体展开图 / 折叠的精确数学模型
+ *
+ *  核心思想：把"展开图"看作【立方体在网格上滚动留下的印记】。
+ *   - 从根格子出发，立方体沿网格滚动，每落到一个新格子，
+ *     此刻"朝上"的那个面，就是该格子在展开图上显示的图案。
+ *   - 折叠 = 上述过程的逆过程（沿同一棵树反向旋转 90°）。
+ *  因此：展开图 <-> 立方体 的图案朝向关系由数学保证，绝不会出错。
+ *
+ *  世界坐标：x 右, y 下(网格行方向), z 上。
+ * ========================================================== */
+(function (root) {
+  'use strict';
+  const C3 = root.Core3D || require('./core3d.js');
+  const { V, M4 } = C3;
+
+  const D2R = Math.PI / 180;
+
+  /* ---------- 初始姿态：6 个面在立方体自身坐标系中的法向与面内 u 轴 ---------- */
+  const FACE_KEYS = ['U', 'D', 'E', 'W', 'S', 'N'];
+  const FACE_NAME = { U: '上', D: '下', E: '右', W: '左', S: '前', N: '后' };
+  function baseOrientation() {
+    // v = n × u，保证 (u,v) 与面法向成右手系
+    const def = {
+      U: { n: [0, 0, 1], u: [1, 0, 0] },
+      D: { n: [0, 0, -1], u: [1, 0, 0] },
+      E: { n: [1, 0, 0], u: [0, 1, 0] },
+      W: { n: [-1, 0, 0], u: [0, -1, 0] },
+      S: { n: [0, 1, 0], u: [1, 0, 0] },
+      N: { n: [0, -1, 0], u: [-1, 0, 0] }
+    };
+    const o = {};
+    for (const k of FACE_KEYS) {
+      const d = def[k];
+      o[k] = { n: d.n.slice(), u: d.u.slice() };
+    }
+    return o;
+  }
+
+  /* ---------- 滚动方向 -> 世界旋转矩阵 ---------- */
+  // 向右(+x)滚：绕 y 轴 -90°；向下(+y)滚：绕 x 轴 +90°
+  const ROLL = {
+    '1,0': M4.rotAxis([0, 1, 0], -90 * D2R),  // +x
+    '-1,0': M4.rotAxis([0, 1, 0], 90 * D2R),  // -x
+    '0,1': M4.rotAxis([1, 0, 0], 90 * D2R),   // +y
+    '0,-1': M4.rotAxis([1, 0, 0], -90 * D2R)  // -y
+  };
+  // 折叠时（逆过程）绕棱旋转的角度与轴：轴在父格局部(平铺=世界)坐标中
+  const FOLD = {
+    '1,0': { axis: [0, 1, 0], ang: 90 * D2R },
+    '-1,0': { axis: [0, 1, 0], ang: -90 * D2R },
+    '0,1': { axis: [1, 0, 0], ang: -90 * D2R },
+    '0,-1': { axis: [1, 0, 0], ang: 90 * D2R }
+  };
+  const DIRS = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+
+  /* ---------- 生成一棵"展开图树" ---------- */
+  /**
+   * @param {object} rng 随机函数 -> [0,1)
+   * @returns {null|{cells, root, minR, maxR, minC, maxC, tree}}
+   */
+  function generateNet(rng, opts = {}) {
+    for (let attempt = 0; attempt < 400; attempt++) {
+      const res = tryNet(rng, opts);
+      if (res) return res;
+    }
+    return tryNet(rng, { fallback: true });
+  }
+
+  function tryNet(rng, opts) {
+    // orientation: 每个面当前的世界法向 / u 轴
+    const ori = baseOrientation();
+    const cells = [];               // {id, r, c, face, u, v, R}
+    const grid = new Map();         // "r,c" -> cell
+    const usedFaces = new Set();
+
+    const push = (r, c, R) => {
+      // 找当前朝上的面
+      let up = null;
+      for (const k of FACE_KEYS) {
+        if (ori[k].n[2] > 0.9) { up = k; break; }
+      }
+      if (!up || usedFaces.has(up)) return null;
+      const cell = {
+        id: cells.length, r, c, face: up,
+        u: ori[up].u.slice(),
+        v: V.cross(ori[up].n, ori[up].u).slice(),
+        R
+      };
+      cells.push(cell);
+      grid.set(r + ',' + c, cell);
+      usedFaces.add(up);
+      return cell;
+    };
+
+    // 根格子
+    const root = push(0, 0, M4.id());
+    if (!root) return null;
+    root.parent = -1; root.dir = null;
+
+    // 随机扩展：每次从已有格子出发向空位滚动，要求滚动后 up 面未使用过
+    let guard = 0;
+    while (cells.length < 6 && guard++ < 200) {
+      const cand = [];
+      for (const cell of cells) {
+        for (const d of DIRS) {
+          const nr = cell.r + d[1], nc = cell.c + d[0];
+          if (grid.has(nr + ',' + nc)) continue;
+          // 该方向是否会造成格子重叠（展开图必须不自交）
+          cand.push({ cell, d, nr, nc });
+        }
+      }
+      if (!cand.length) return null;
+      // 打乱
+      for (let i = cand.length - 1; i > 0; i--) {
+        const j = Math.floor(rng() * (i + 1));
+        [cand[i], cand[j]] = [cand[j], cand[i]];
+      }
+      let placed = null;
+      for (const cd of cand) {
+        const key = cd.d[0] + ',' + cd.d[1];
+        // 计算滚动后的姿态
+        const Rnew = M4.mul(ROLL[key], cd.cell.R);
+        // 试着用这个姿态判断 up 面是否已用
+        const ori2 = {};
+        let ok = false;
+        for (const k of FACE_KEYS) {
+          const n = M4.dir(Rnew, baseOrientation()[k].n);
+          if (n[2] > 0.9) { ok = !usedFaces.has(k); ori2.up = k; break; }
+        }
+        if (!ok) continue;
+        // 真实滚动：更新全局姿态
+        for (const k of FACE_KEYS) {
+          ori[k].n = M4.dir(ROLL[key], ori[k].n);
+          ori[k].u = M4.dir(ROLL[key], ori[k].u);
+        }
+        const cell = push(cd.nr, cd.nc, Rnew);
+        if (!cell) return null;
+        cell.parent = cd.cell.id;
+        cell.dir = key;
+        placed = cell;
+        break;
+      }
+      if (!placed) {
+        if (opts.fallback) continue;
+        return null; // 死路
+      }
+    }
+    if (cells.length !== 6) return null;
+
+    // 归一化坐标到 0..
+    let minR = Infinity, maxR = -Infinity, minC = Infinity, maxC = -Infinity;
+    for (const c of cells) {
+      minR = Math.min(minR, c.r); maxR = Math.max(maxR, c.r);
+      minC = Math.min(minC, c.c); maxC = Math.max(maxC, c.c);
+    }
+    for (const c of cells) { c.r -= minR; c.c -= minC; }
+    const net = {
+      cells, root: 0,
+      rows: maxR - minR + 1, cols: maxC - minC + 1,
+      fingerprint: cells.map((c) => c.r + ':' + c.c).sort().join('|')
+    };
+    // 关键：并非任意 6 连通格都能折成立方体（合法者仅 11 种），必须验证闭合
+    if (!isValidNet(net)) return null;
+    return net;
+  }
+
+  /** 校验：折叠后必须恰好闭合成一个立方体（6 个面互不重叠、法向覆盖 6 个轴向） */
+  function isValidNet(net, size = 1) {
+    const faces = buildFaces(net, 1, {}, size);
+    if (faces.length !== 6) return false;
+    const off = cubeCenterOffset(net, size);
+    const seen = new Set();
+    for (const f of faces) {
+      const n = f.normal.map((x) => Math.round(x));
+      const c = V.add(f.center, off).map((x) => +(x / size).toFixed(4));
+      const key = n.join(',') + '|' + c.join(',');
+      if (seen.has(key)) return false;
+      seen.add(key);
+      // 面心必须落在 ±0.5 的轴向上
+      const nz = c.filter((x) => Math.abs(x) > 1e-4).length;
+      const m = Math.max(Math.abs(c[0]), Math.abs(c[1]), Math.abs(c[2]));
+      if (nz < 1 || Math.abs(m - 0.5) > 1e-4) return false;
+    }
+    // 6 个法向互不相同
+    const ns = new Set(faces.map((f) => f.normal.map((x) => Math.round(x)).join(',')));
+    return ns.size === 6;
+  }
+
+  /* ---------- 立方体展开图的全部 11 种形态 ----------
+   * 由程序穷举 35 种六连块 + 折叠闭合校验得出，
+   * 结果为 1-4-1 型 6 种 / 2-3-1 型 3 种 / 3-3 型 1 种 / 2-2-2 型 1 种，
+   * 与"立方体展开图共 11 种"的数学结论完全一致。 */
+  const CLASSIC_LAYOUTS = {
+    net1: { name: '1-4-1 型·竖十字', type: '1-4-1', cells: [[1, 1], [2, 1], [0, 1], [1, 2], [1, 0], [3, 1]] },
+    net2: { name: '1-4-1 型·错一', type: '1-4-1', cells: [[1, 1], [2, 1], [0, 1], [1, 2], [3, 1], [2, 0]] },
+    net3: { name: '1-4-1 型·错二', type: '1-4-1', cells: [[1, 1], [2, 1], [0, 1], [1, 2], [3, 1], [0, 0]] },
+    net4: { name: '1-4-1 型·错三', type: '1-4-1', cells: [[1, 1], [2, 1], [0, 1], [1, 2], [3, 1], [3, 0]] },
+    net5: { name: '2-3-1 型·甲', type: '2-3-1', cells: [[1, 1], [2, 1], [0, 1], [1, 2], [2, 0], [1, 3]] },
+    net6: { name: '2-3-1 型·乙', type: '2-3-1', cells: [[1, 1], [2, 1], [0, 1], [1, 2], [2, 0], [3, 0]] },
+    net7: { name: '1-4-1 型·横十字', type: '1-4-1', cells: [[1, 0], [2, 0], [0, 0], [1, 1], [1, 2], [1, 3]] },
+    net8: { name: '1-4-1 型·错四', type: '1-4-1', cells: [[1, 1], [2, 1], [0, 1], [3, 1], [0, 2], [3, 0]] },
+    net9: { name: '2-3-1 型·丙', type: '2-3-1', cells: [[1, 1], [2, 1], [0, 1], [2, 2], [0, 0], [3, 2]] },
+    net10: { name: '3-3 型', type: '3-3', cells: [[1, 0], [2, 0], [0, 0], [2, 1], [3, 1], [4, 1]] },
+    net11: { name: '2-2-2 型·阶梯', type: '2-2-2', cells: [[1, 1], [2, 1], [1, 2], [2, 0], [0, 2], [3, 0]] }
+  };
+
+  /** 由坐标布局推导展开图（自动求树与姿态） */
+  function buildNetFromLayout(coords, rootIndex) {
+    const set = new Set(coords.map((c) => c[0] + ',' + c[1]));
+    const idx = new Map(coords.map((c, i) => [c[0] + ',' + c[1], i]));
+    // 选根：默认第一个
+    let root = rootIndex != null ? rootIndex : 0;
+    // BFS 建树
+    const parent = new Array(coords.length).fill(-1);
+    const dir = new Array(coords.length).fill(null);
+    const order = [root];
+    const seen = new Set([root]);
+    while (order.length < coords.length) {
+      let grew = false;
+      for (const i of order.slice()) {
+        for (const d of DIRS) {
+          const k = (coords[i][0] + d[1]) + ',' + (coords[i][1] + d[0]);
+          if (!idx.has(k)) continue;
+          const j = idx.get(k);
+          if (seen.has(j)) continue;
+          parent[j] = i; dir[j] = d[0] + ',' + d[1];
+          seen.add(j); order.push(j); grew = true;
+        }
+      }
+      if (!grew) break;
+    }
+    if (order.length !== coords.length) return null; // 不连通
+    // 沿树累积姿态
+    const ori = baseOrientation();
+    const cells = coords.map((c, i) => ({ r: c[0], c: c[1], id: i, parent: parent[i], dir: dir[i] }));
+    const R = new Array(coords.length).fill(null);
+    R[root] = M4.id();
+    for (const i of order) {
+      if (i === root) continue;
+      R[i] = M4.mul(ROLL[dir[i]], R[parent[i]]);
+    }
+    const usedFaces = new Set();
+    for (const i of order) {
+      let up = null;
+      for (const k of FACE_KEYS) {
+        const n = M4.dir(R[i], baseOrientation()[k].n);
+        if (n[2] > 0.9) { up = k; break; }
+      }
+      if (!up || usedFaces.has(up)) return null;
+      usedFaces.add(up);
+      cells[i].face = up;
+      cells[i].R = R[i];
+      const n0 = baseOrientation()[up].n, u0 = baseOrientation()[up].u;
+      cells[i].u = M4.dir(R[i], u0);
+      cells[i].v = M4.dir(R[i], V.cross(n0, u0));
+    }
+    let minR = Infinity, minC = Infinity, maxR = -Infinity, maxC = -Infinity;
+    for (const c of cells) {
+      minR = Math.min(minR, c.r); maxR = Math.max(maxR, c.r);
+      minC = Math.min(minC, c.c); maxC = Math.max(maxC, c.c);
+    }
+    for (const c of cells) { c.r -= minR; c.c -= minC; }
+    // 重排 id 使父在子前
+    const remap = new Map(); const ordered = [];
+    for (const i of order) { remap.set(i, ordered.length); ordered.push(cells[i]); }
+    ordered.forEach((c) => { c.id = remap.get(c.id); c.parent = c.parent < 0 ? -1 : remap.get(c.parent); });
+    const net = { cells: ordered, root: 0, rows: maxR - minR + 1, cols: maxC - minC + 1, fingerprint: coords.map((c) => c.join(':')).sort().join('|') };
+    if (!isValidNet(net)) return null;
+    return net;
+  }
+
+  /* ---------- 折叠：计算每个格子在折叠进度 t 下的 4x4 变换 ---------- */
+  /**
+   * @param net 展开图对象
+   * @param t 0=完全展开 1=完全折叠
+   * @param size 格子边长（世界单位）
+   */
+  function foldTransforms(net, t, size = 1) {
+    const mats = new Array(net.cells.length);
+    // 根格子：平铺在 z=0，中心在 (c*size, r*size, 0)
+    const base = M4.trans(net.cells[0].c * size, net.cells[0].r * size, 0);
+    mats[0] = base;
+    for (let i = 1; i < net.cells.length; i++) {
+      const cell = net.cells[i];
+      const p = net.cells[cell.parent];
+      const f = FOLD[cell.dir];
+      // 棱：在【父格平铺局部坐标系】中表达（原点=父格中心，轴对齐世界）
+      // 平铺时子格相对父格的偏移为 (dc, dr, 0)*size，棱中点为半格
+      const e = [
+        (cell.c - p.c) * size / 2,
+        (cell.r - p.r) * size / 2,
+        0
+      ];
+      const hinge = M4.mul(
+        M4.trans(e[0], e[1], e[2]),
+        M4.mul(M4.rotAxis(f.axis, f.ang * t), M4.trans(-e[0], -e[1], -e[2]))
+      );
+      // 子格平铺时相对父格的偏移：先把局部原点移到该偏移处，再随父格一起绕棱旋转
+      const off = M4.trans((cell.c - p.c) * size, (cell.r - p.r) * size, 0);
+      mats[i] = M4.mul(mats[cell.parent], M4.mul(hinge, off));
+    }
+    return mats;
+  }
+
+  /** 平铺状态下格子的 4 个角（局部坐标，中心为原点） */
+  function cellCorners(size = 1) {
+    const h = size / 2;
+    return [[-h, -h, 0], [h, -h, 0], [h, h, 0], [-h, h, 0]];
+  }
+
+  /**
+   * 生成渲染用的面（折叠进度 t）
+   * patterns: { U: 图案名, D: ..., E:..., W:..., S:..., N:... }
+   */
+  function buildFaces(net, t, patterns, size = 1) {
+    const mats = foldTransforms(net, t, size);
+    const faces = [];
+    for (let i = 0; i < net.cells.length; i++) {
+      const cell = net.cells[i];
+      const M = mats[i];
+      const pts = cellCorners(size).map((p) => M4.apply(M, p));
+      const c0 = M4.apply(M, [0, 0, 0]);
+      // 面内基（平铺时的世界向量 -> 经折叠变换）
+      const U = V.norm(M4.dir(M, cell.u));
+      const Vv = V.norm(M4.dir(M, cell.v));
+      const n = V.norm(V.cross(U, Vv));
+      faces.push({
+        pts,
+        center: c0,
+        U: V.mul(U, size), V: V.mul(Vv, size),
+        normal: n,
+        faceKey: cell.face,
+        pattern: patterns[cell.face] || 'blank',
+        size,
+        cellId: i
+      });
+    }
+    return faces;
+  }
+
+  /** 折叠完成后，把整个立方体居中（返回平移量） */
+  function cubeCenterOffset(net, size = 1) {
+    const faces = buildFaces(net, 1, {}, size);
+    const c = faces.reduce((a, f) => V.add(a, f.center), [0, 0, 0]);
+    return V.mul(c.map((x) => -x / faces.length), 1);
+  }
+
+  /** 立方体各面中心（折叠完成后，已居中）—— 用于"拆纸盒"题渲染 */
+  function cubeFacesFinal(patterns, size = 1) {
+    const o = baseOrientation();
+    const out = [];
+    for (const k of FACE_KEYS) {
+      const n = o[k].n, u = o[k].u, v = V.cross(n, u);
+      out.push({
+        faceKey: k,
+        center: V.mul(n, size / 2),
+        U: V.mul(u, size), V: V.mul(v, size),
+        normal: n,
+        pattern: patterns[k] || 'blank',
+        size
+      });
+    }
+    return out;
+  }
+
+  /* ---------- 相对面 / 相邻面推理工具（供解析生成器使用） ---------- */
+  const OPPOSITE = { U: 'D', D: 'U', E: 'W', W: 'E', S: 'N', N: 'S' };
+
+  /** 展开图中，两格是否"相间排列"或"Z 字两端"（相对面特征） */
+  function isOppositePair(net, i, j) {
+    return net.cells[i].face === OPPOSITE[net.cells[j].face];
+  }
+
+  /** 面的中文名 */
+  function faceLabel(k) { return FACE_NAME[k] || k; }
+
+  const API = {
+    FACE_KEYS, FACE_NAME, OPPOSITE, baseOrientation,
+    generateNet, buildNetFromLayout, CLASSIC_LAYOUTS,
+    foldTransforms, buildFaces, cellCorners, cubeCenterOffset, cubeFacesFinal,
+    isOppositePair, faceLabel, isValidNet
+  };
+  if (typeof module !== 'undefined' && module.exports) module.exports = API;
+  root.CubeNet = API;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+;
+;
+/* ===== patterns.js ===== */
+/* ============================================================
+ *  patterns.js  ——  立方体表面的图案库
+ *  坐标为面内局部坐标 [-0.5, 0.5]，u 向右、v 向下（与展开图一致）
+ *  均以 SVG path 描述，Canvas 侧用 Path2D 直接复用
+ *  symmetric=false 的图案具有方向性，可用于"箭头法/时针法"
+ * ========================================================== */
+(function (root) {
+  'use strict';
+
+  const P = {};
+  const def = (id, cn, d, opt = {}) => {
+    P[id] = Object.assign({ id, cn, d, fill: true, stroke: false, symmetric: !!opt.symmetric }, opt);
+  };
+
+  /* --- 中心对称（无方向性） --- */
+  def('blank', '空白', '', { fill: false });
+  def('circle', '实心圆', 'M -0.3 0 A 0.3 0.3 0 1 0 0.3 0 A 0.3 0.3 0 1 0 -0.3 0 Z', { symmetric: true });
+  def('ring', '空心圆', 'M -0.32 0 A 0.32 0.32 0 1 0 0.32 0 A 0.32 0.32 0 1 0 -0.32 0 Z M -0.16 0 A 0.16 0.16 0 1 1 0.16 0 A 0.16 0.16 0 1 1 -0.16 0 Z', { symmetric: true, evenodd: true });
+  def('square', '实心方', 'M -0.28 -0.28 H 0.28 V 0.28 H -0.28 Z', { symmetric: true });
+  def('squareHollow', '空心方', 'M -0.3 -0.3 H 0.3 V 0.3 H -0.3 Z M -0.15 -0.15 V 0.15 H 0.15 V -0.15 Z', { symmetric: true, evenodd: true });
+  def('cross', '十字', 'M -0.09 -0.32 H 0.09 V -0.09 H 0.32 V 0.09 H 0.09 V 0.32 H -0.09 V 0.09 H -0.32 V -0.09 H -0.09 Z', { symmetric: true });
+  def('diagA', '斜线↗', 'M -0.42 0.3 L -0.3 0.42 L 0.42 -0.3 L 0.3 -0.42 Z', { symmetric: true });
+  def('diagB', '斜线↘', 'M -0.3 -0.42 L -0.42 -0.3 L 0.3 0.42 L 0.42 0.3 Z', { symmetric: true });
+  def('stripeH', '横条纹', 'M -0.42 -0.26 H 0.42 V -0.1 H -0.42 Z M -0.42 0.1 H 0.42 V 0.26 H -0.42 Z', { symmetric: true });
+  def('stripeV', '竖条纹', 'M -0.26 -0.42 V 0.42 H -0.1 V -0.42 Z M 0.1 -0.42 V 0.42 H 0.26 V -0.42 Z', { symmetric: true });
+  def('diamond', '菱形', 'M 0 -0.34 L 0.34 0 L 0 0.34 L -0.34 0 Z', { symmetric: true });
+  def('dotC', '中心点', 'M -0.12 0 A 0.12 0.12 0 1 0 0.12 0 A 0.12 0.12 0 1 0 -0.12 0 Z', { symmetric: true });
+
+  /* --- 有方向性（非中心对称）：箭头法/时针法的关键 --- */
+  def('triUp', '正三角', 'M 0 -0.34 L 0.34 0.26 L -0.34 0.26 Z');
+  def('triDown', '倒三角', 'M 0 0.34 L -0.34 -0.26 L 0.34 -0.26 Z');
+  def('arrowR', '右箭头', 'M -0.32 -0.1 H 0.04 V -0.3 L 0.36 0 L 0.04 0.3 V 0.1 H -0.32 Z');
+  def('arrowU', '上箭头', 'M -0.1 0.32 V -0.04 H -0.3 L 0 -0.36 L 0.3 -0.04 H 0.1 V 0.32 Z');
+  def('arrowD', '下箭头', 'M -0.1 -0.32 V 0.04 H -0.3 L 0 0.36 L 0.3 0.04 H 0.1 V -0.32 Z');
+  def('halfB', '下半填', 'M -0.5 0 H 0.5 V 0.5 H -0.5 Z');
+  def('halfT', '上半填', 'M -0.5 -0.5 H 0.5 V 0 H -0.5 Z');
+  def('halfL', '左半填', 'M -0.5 -0.5 V 0.5 H 0 V -0.5 Z');
+  def('halfR', '右半填', 'M 0 -0.5 V 0.5 H 0.5 V -0.5 Z');
+  def('cornerTL', '左上三角', 'M -0.5 -0.5 H 0.1 L -0.5 0.1 Z');
+  def('cornerBR', '右下三角', 'M 0.5 0.5 H -0.1 L 0.5 -0.1 Z');
+  def('cornerTR', '右上三角', 'M 0.5 -0.5 V 0.1 L -0.1 -0.5 Z');
+  def('cornerBL', '左下三角', 'M -0.5 0.5 V -0.1 L 0.1 0.5 Z');
+  def('Lshape', 'L 形', 'M -0.3 -0.32 H -0.03 V 0.19 H 0.3 V 0.34 H -0.3 Z');
+  def('Jshape', 'J 形', 'M 0.3 -0.32 H 0.03 V 0.19 H -0.3 V 0.34 H 0.3 Z');
+  def('Tshape', 'T 形', 'M -0.32 -0.32 H 0.32 V -0.06 H 0.09 V 0.34 H -0.09 V -0.06 H -0.32 Z');
+  def('Tinv', '倒 T 形', 'M -0.32 0.32 H 0.32 V 0.06 H 0.09 V -0.34 H -0.09 V 0.06 H -0.32 Z');
+  def('semiU', '上半圆', 'M -0.33 0 A 0.33 0.33 0 0 1 0.33 0 Z');
+  def('semiD', '下半圆', 'M -0.33 0 A 0.33 0.33 0 0 0 0.33 0 Z');
+  def('chevU', '上折线', 'M -0.34 0.14 L 0 -0.3 L 0.34 0.14 L 0.12 0.14 L 0 -0.08 L -0.12 0.14 Z');
+  def('chevD', '下折线', 'M -0.34 -0.14 L 0 0.3 L 0.34 -0.14 L 0.12 -0.14 L 0 0.08 L -0.12 -0.14 Z');
+  def('dots2', '双点', 'M -0.2 -0.2 A 0.1 0.1 0 1 0 -0.2 -0.20001 Z M 0.2 0.2 A 0.1 0.1 0 1 0 0.2 0.20001 Z');
+  def('dots3', '三点', 'M -0.24 -0.24 A 0.09 0.09 0 1 0 -0.24 -0.24001 Z M 0 0 A 0.09 0.09 0 1 0 0 0.00001 Z M 0.24 0.24 A 0.09 0.09 0 1 0 0.24 0.24001 Z', { symmetric: true });
+  def('barT', '顶横条', 'M -0.5 -0.5 H 0.5 V -0.2 H -0.5 Z');
+  def('barB', '底横条', 'M -0.5 0.5 H 0.5 V 0.2 H -0.5 Z');
+  def('barL', '左竖条', 'M -0.5 -0.5 V 0.5 H -0.2 V -0.5 Z');
+  def('barR', '右竖条', 'M 0.2 -0.5 V 0.5 H 0.5 V -0.5 Z');
+  def('flag', '小旗', 'M -0.3 -0.34 V 0.34 H -0.14 V 0.12 L 0.34 -0.04 V -0.34 Z');
+  def('house', '房子形', 'M 0 -0.34 L 0.32 -0.06 V 0.32 H -0.32 V -0.06 Z');
+  def('steps', '台阶', 'M -0.4 0.3 V 0.05 H -0.1 V -0.2 H 0.2 V -0.32 H 0.4 V 0.3 Z');
+
+  const IDS = Object.keys(P);
+  const DIRECTIONAL = IDS.filter((k) => !P[k].symmetric && k !== 'blank');
+
+  const API = { P, IDS, DIRECTIONAL, get: (id) => P[id] || P.blank };
+  if (typeof module !== 'undefined' && module.exports) module.exports = API;
+  root.Patterns = API;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+;
+;
+/* ===== render.js ===== */
+/* ============================================================
+ *  render.js  ——  渲染层
+ *   · SVG 输出：用于题库题干/选项/解析（静态、可缩放、可打印）
+ *   · Canvas 输出：用于 3D 实验室（可拖拽旋转、播放折叠动画）
+ *   · 三视图 / 截面：由体素模型直接投影或切割求得
+ * ========================================================== */
+(function (root) {
+  'use strict';
+  const C3 = root.Core3D || require('./core3d.js');
+  const CN = root.CubeNet || require('./cube.js');
+  const PT = root.Patterns || require('./patterns.js');
+  const { V, M4, Camera } = C3;
+
+  const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+
+  /* ---------- 通用：把面集投影并自动适配到画布 ---------- */
+  function measure(faces, cam) {
+    let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+    for (const f of faces) {
+      const pts = f.pts || C3.facePoly(f);
+      for (const p of pts) {
+        const q = cam.project(p, 1, 0, 0);
+        minX = Math.min(minX, q[0]); maxX = Math.max(maxX, q[0]);
+        minY = Math.min(minY, q[1]); maxY = Math.max(maxY, q[1]);
+      }
+    }
+    return { minX, maxX, minY, maxY, w: maxX - minX, h: maxY - minY };
+  }
+
+  /**
+   * 面集 -> SVG 字符串
+   * faces: [{pts, center, U, V, normal, pattern, color...}]
+   */
+  function facesToSVG(faces, opt = {}) {
+    const W = opt.width || 200, H = opt.height || 200, pad = opt.pad != null ? opt.pad : 12;
+    const cam = opt.cam || new Camera({ yaw: -Math.PI * 0.75, pitch: 0.62 });
+    const stroke = opt.stroke || '#5b4750';
+    const strokeW = opt.strokeWidth || 1.4;
+    const fill = opt.fill || '#fffafb';
+    const ink = opt.ink || '#3d2f36';
+    const scale = opt.scale || 1;
+
+    const m = measure(faces, cam);
+    const size = Math.min((W - pad * 2) / (m.w || 1), (H - pad * 2) / (m.h || 1)) * scale;
+    const cx = W / 2 - (m.minX + m.maxX) / 2 * size;
+    const cy = H / 2 - (m.minY + m.maxY) / 2 * size;
+
+    // 画家算法：远的先画
+    const sorted = faces.slice().sort((a, b) => V.dot(a.center, cam.f) - V.dot(b.center, cam.f));
+    const out = [];
+    out.push(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" class="fig">`);
+    if (opt.bg) out.push(`<rect width="${W}" height="${H}" fill="${opt.bg}"/>`);
+    for (const f of sorted) {
+      const n = V.dot(f.normal, cam.f);
+      if (n <= 1e-6 && !opt.showAll) continue;         // 背面剔除
+      const pts = (f.pts || C3.facePoly(f)).map((p) => cam.project(p, size, cx, cy));
+      const C = cam.project(f.center, size, cx, cy);
+      const U = cam.projectDir(f.U, size);
+      const Vv = cam.projectDir(f.V, size);
+      // 简易明暗：法向越正对相机越亮
+      const shade = 1 - Math.min(0.16, Math.abs(n) * 0.16) * 0 - (1 - Math.abs(n)) * 0.1;
+      const base = f.color || fill;
+      const poly = pts.map((p) => p[0].toFixed(2) + ',' + p[1].toFixed(2)).join(' ');
+      out.push(`<polygon points="${poly}" fill="${base}" stroke="${stroke}" stroke-width="${strokeW}" stroke-linejoin="round"/>`);
+      const pat = PT.get(f.pattern);
+      if (pat && pat.d) {
+        const rot = f.patternRot ? ` rotate(${f.patternRot})` : '';
+        const mm = `matrix(${U[0].toFixed(4)} ${U[1].toFixed(4)} ${Vv[0].toFixed(4)} ${Vv[1].toFixed(4)} ${C[0].toFixed(2)} ${C[1].toFixed(2)})${rot}`;
+        const fr = pat.evenodd ? ' fill-rule="evenodd"' : '';
+        out.push(`<g transform="${mm}"><path d="${pat.d}" fill="${f.patternColor || ink}"${fr} stroke="none"/></g>`);
+      }
+      if (opt.labelFaces && f.faceKey) {
+        out.push(`<text x="${C[0].toFixed(1)}" y="${C[1].toFixed(1)}" font-size="9" fill="#d0778f" text-anchor="middle">${esc(f.faceKey)}</text>`);
+      }
+    }
+    out.push('</svg>');
+    return out.join('');
+  }
+
+  /* ---------- 展开图（平面图）专用渲染 ---------- */
+  function netToSVG(net, patterns, opt = {}) {
+    const cellPx = opt.cell || 44;
+    const R = net.rows, C = net.cols;
+    const W = (opt.width || C * cellPx) + 8, H = (opt.height || R * cellPx) + 8;
+    const ox = 4, oy = 4;
+    const stroke = opt.stroke || '#5b4750';
+    const ink = opt.ink || '#3d2f36';
+    const out = [];
+    out.push(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" class="fig">`);
+    for (const cell of net.cells) {
+      const x = ox + cell.c * cellPx, y = oy + cell.r * cellPx;
+      // 面内基（世界 xy 向量）在 SVG 中：u 轴 -> x 方向，v 轴 -> y 方向
+      const a = cell.u[0], b = cell.u[1], c = cell.v[0], d = cell.v[1];
+      const mm = `matrix(${(a * cellPx).toFixed(3)} ${(b * cellPx).toFixed(3)} ${(c * cellPx).toFixed(3)} ${(d * cellPx).toFixed(3)} ${(x + cellPx / 2).toFixed(2)} ${(y + cellPx / 2).toFixed(2)})`;
+      out.push(`<rect x="${x}" y="${y}" width="${cellPx}" height="${cellPx}" fill="#fffafb" stroke="${stroke}" stroke-width="1.4" stroke-linejoin="round"/>`);
+      const pat = PT.get((patterns || {})[cell.face]);
+      if (pat && pat.d) {
+        const rot = (patterns || {})[cell.face + '_rot'] ? ` rotate(${(patterns || {})[cell.face + '_rot']})` : '';
+        const fr = pat.evenodd ? ' fill-rule="evenodd"' : '';
+        out.push(`<g transform="${mm}${rot}"><path d="${pat.d}" fill="${opt.patternColor || ink}"${fr}/></g>`);
+      }
+      if (opt.labelFaces) {
+        out.push(`<text x="${x + 12}" y="${y + 15}" font-size="10" fill="${opt.labelColor || '#d0778f'}">${esc(cell.face)}</text>`);
+      }
+    }
+    out.push('</svg>');
+    return out.join('');
+  }
+
+  /* ---------- 立方体立体图（拆/折纸盒题） ---------- */
+  function cubeToSVG(patterns, opt = {}) {
+    const faces = CN.cubeFacesFinal(patterns || {}, 1);
+    for (const f of faces) f.pts = C3.facePoly(f, 0.5);
+    return facesToSVG(faces, Object.assign({ width: 180, height: 180 }, opt));
+  }
+
+  /* ---------- 体素（小立方体堆叠）模型 ---------- */
+  /**
+   * cells: [[x,y,z], ...] 单位立方体中心/或整数坐标（占据 [x,x+1]³）
+   * 这里约定 cells 为整数格坐标，立方体占据 [x,x+1]×[y,y+1]×[z,z+1]
+   */
+  function voxelFaces(cells, opt = {}) {
+    const faces = [];
+    const set = new Set(cells.map((c) => c.join(',')));
+    const has = (x, y, z) => set.has(x + ',' + y + ',' + z);
+    for (const [x, y, z] of cells) {
+      const c = [x + 0.5, y + 0.5, z + 0.5];
+      const all = C3.unitCubeFaces(c, { color: opt.color || '#fffafb' });
+      const dirs = [[1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1]];
+      all.forEach((f, i) => {
+        const d = dirs[i];
+        if (has(x + d[0], y + d[1], z + d[2])) return; // 内部面，剔除
+        f.pts = C3.facePoly(f, 0.5);
+        f.ghost = false;
+        faces.push(f);
+      });
+    }
+    return faces;
+  }
+
+  function voxelsToSVG(cells, opt = {}) {
+    const faces = voxelFaces(cells, opt);
+    const cam = opt.cam || new Camera({ yaw: -Math.PI * 0.75, pitch: 0.62 });
+    // 按体素深度排序（避免面级穿插）
+    faces.sort((a, b) => V.dot(a.center, cam.f) - V.dot(b.center, cam.f));
+    return facesToSVG(faces, Object.assign({ cam }, opt));
+  }
+
+  /* ---------- 三视图 ---------- */
+  // 视图方向：front(主视,从+y看) / top(俯视,从+z看) / left(左视,从-x看) / right / back / bottom
+  const VIEW_AXES = {
+    front: { h: 'x', v: 'z', flipH: false, flipV: true, key: (c) => [c[0], c[2]] },
+    back: { h: 'x', v: 'z', flipH: true, flipV: true, key: (c) => [-c[0], c[2]] },
+    top: { h: 'x', v: 'y', flipH: false, flipV: false, key: (c) => [c[0], c[1]] },
+    bottom: { h: 'x', v: 'y', flipH: true, flipV: false, key: (c) => [-c[0], c[1]] },
+    left: { h: 'y', v: 'z', flipH: false, flipV: true, key: (c) => [-c[1], c[2]] },
+    right: { h: 'y', v: 'z', flipH: true, flipV: true, key: (c) => [c[1], c[2]] }
+  };
+  const VIEW_CN = { front: '主视图', back: '后视图', top: '俯视图', bottom: '仰视图', left: '左视图', right: '右视图' };
+
+  /** 某视图的投影方格集合 */
+  function viewCells(cells, view) {
+    const ax = VIEW_AXES[view];
+    const s = new Set();
+    for (const c of cells) s.add(ax.key(c).join(','));
+    return Array.from(s).map((k) => k.split(',').map(Number));
+  }
+  function viewCellsSVG(cells, view, opt = {}) {
+    const g = viewCells(cells, view);
+    return gridToSVG(g, opt);
+  }
+  /** 由 2D 方格集合画"由小正方形拼成"的视图 */
+  function gridToSVG(grid, opt = {}) {
+    const cell = opt.cell || 26;
+    let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+    for (const [x, y] of grid) {
+      minX = Math.min(minX, x); maxX = Math.max(maxX, x);
+      minY = Math.min(minY, y); maxY = Math.max(maxY, y);
+    }
+    const W = (maxX - minX + 1) * cell + 8, H = (maxY - minY + 1) * cell + 8;
+    const out = [`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${opt.width || W}" height="${opt.height || H}" class="fig">`];
+    for (const [x, y] of grid) {
+      const px = 4 + (x - minX) * cell, py = 4 + (y - minY) * cell;
+      out.push(`<rect x="${px}" y="${py}" width="${cell}" height="${cell}" fill="${opt.fill || '#fffafb'}" stroke="${opt.stroke || '#5b4750'}" stroke-width="${opt.strokeWidth || 1.3}" stroke-linejoin="round"/>`);
+    }
+    out.push('</svg>');
+    return out.join('');
+  }
+
+  /* ---------- 截面：平面切体素集合 ---------- */
+  /**
+   * plane: {p:[x,y,z] 平面上一点, n:[nx,ny,nz] 法向}
+   * 返回 {svg, area, count} count=连通块数（用于判断"能否一刀切出"）
+   */
+  function sectionOf(cells, plane, opt = {}) {
+    const step = opt.step || 0.05;
+    const n = V.norm(plane.n);
+    // 平面内两个正交基
+    let e1 = V.norm(Math.abs(n[0]) < 0.9 ? V.cross(n, [1, 0, 0]) : V.cross(n, [0, 1, 0]));
+    let e2 = V.cross(n, e1);
+    const P0 = plane.p;
+    const inSolid = (p) => {
+      // 点是否落在某个体素内（含边界）
+      for (const c of cells) {
+        if (p[0] >= c[0] - 1e-9 && p[0] <= c[0] + 1 + 1e-9 &&
+          p[1] >= c[1] - 1e-9 && p[1] <= c[1] + 1 + 1e-9 &&
+          p[2] >= c[2] - 1e-9 && p[2] <= c[2] + 1 + 1e-9) return true;
+      }
+      return false;
+    };
+    // 采样范围
+    let ext = 0;
+    for (const c of cells) ext = Math.max(ext, Math.abs(c[0]) + 1, Math.abs(c[1]) + 1, Math.abs(c[2]) + 1);
+    ext += 1;
+    const N = Math.ceil(ext * 2 / step);
+    const grid = new Uint8Array(N * N);
+    const ij2p = (i, j) => {
+      const a = -ext + i * step, b = -ext + j * step;
+      return [P0[0] + e1[0] * a + e2[0] * b, P0[1] + e1[1] * a + e2[1] * b, P0[2] + e1[2] * a + e2[2] * b];
+    };
+    for (let i = 0; i < N; i++) {
+      for (let j = 0; j < N; j++) {
+        grid[i * N + j] = inSolid(ij2p(i, j)) ? 1 : 0;
+      }
+    }
+    return { grid, N, step, ext, e1, e2, n, P0, ij2p };
+  }
+
+  /** 截面 -> SVG（实心填充 + 外轮廓） */
+  function sectionToSVG(sec, opt = {}) {
+    const { grid, N, step, ext } = sec;
+    const scale = opt.scale || 26;
+    // 找边界并统计连通块
+    const visited = new Uint8Array(N * N);
+    let comps = 0;
+    const cellsOut = [];
+    for (let i = 0; i < N; i++) for (let j = 0; j < N; j++) {
+      if (!grid[i * N + j] || visited[i * N + j]) continue;
+      comps++;
+      const st = [[i, j]]; visited[i * N + j] = 1;
+      while (st.length) {
+        const [a, b] = st.pop();
+        cellsOut.push([a, b]);
+        for (const [da, db] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+          const na = a + da, nb = b + db;
+          if (na < 0 || nb < 0 || na >= N || nb >= N) continue;
+          if (grid[na * N + nb] && !visited[na * N + nb]) { visited[na * N + nb] = 1; st.push([na, nb]); }
+        }
+      }
+    }
+    if (!cellsOut.length) return { svg: '', comps: 0, area: 0 };
+    // 边界线段（合并共线）
+    const segsH = [], segsV = [];
+    const at = (i, j) => (i >= 0 && j >= 0 && i < N && j < N) ? grid[i * N + j] : 0;
+    for (let i = 0; i < N; i++) for (let j = 0; j < N; j++) {
+      if (!at(i, j)) continue;
+      if (!at(i, j - 1)) segsH.push([i, j]);       // 上边
+      if (!at(i, j + 1)) segsH.push([i, j + 1]);   // 下边
+      if (!at(i - 1, j)) segsV.push([i, j]);       // 左边
+      if (!at(i + 1, j)) segsV.push([i + 1, j]);   // 右边
+    }
+    const merge = (arr, horizontal) => {
+      const map = new Map();
+      for (const [a, b] of arr) {
+        const k = horizontal ? b : a;
+        if (!map.has(k)) map.set(k, []);
+        map.get(k).push(horizontal ? a : b);
+      }
+      const out = [];
+      for (const [k, list] of map) {
+        list.sort((x, y) => x - y);
+        let s = list[0], prev = list[0];
+        for (let t = 1; t < list.length; t++) {
+          if (list[t] === prev + 1) { prev = list[t]; continue; }
+          out.push([s, prev + 1, k]); s = list[t]; prev = list[t];
+        }
+        out.push([s, prev + 1, k]);
+      }
+      return out;
+    };
+    const hs = merge(segsH, true), vs = merge(segsV, false);
+    const X = (i) => (i * step - ext) * scale;
+    const Y = (j) => (j * step - ext) * scale;
+    const d = [];
+    for (const [a, b, k] of hs) d.push(`M ${X(a).toFixed(1)} ${Y(k).toFixed(1)} H ${X(b).toFixed(1)}`);
+    for (const [a, b, k] of vs) d.push(`M ${X(k).toFixed(1)} ${Y(a).toFixed(1)} V ${Y(b).toFixed(1)}`);
+    let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+    for (const [a, b] of cellsOut) { minX = Math.min(minX, X(a)); maxX = Math.max(maxX, X(b + 1)); minY = Math.min(minY, Y(a)); maxY = Math.max(maxY, Y(b + 1)); }
+    const W = maxX - minX + 8, H = maxY - minY + 8;
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${minX - 4} ${minY - 4} ${W} ${H}" width="${opt.width || Math.min(W, 170)}" height="${opt.height || Math.min(H, 170)}" class="fig">` +
+      `<path d="${d.join(' ')}" fill="none" stroke="${opt.stroke || '#5b4750'}" stroke-width="${opt.strokeWidth || 1.6}" stroke-linecap="round"/>` +
+      `</svg>`;
+    return { svg, comps, area: cellsOut.length * step * step, pathD: d.join(' ') };
+  }
+
+  /* ---------- Canvas 渲染器（3D 实验室用） ---------- */
+  class Scene {
+    constructor(canvas, opt = {}) {
+      this.canvas = canvas;
+      this.ctx = canvas.getContext('2d');
+      this.cam = new Camera(opt.cam || {});
+      this.faces = [];
+      this.offset = [0, 0, 0];
+      this.dpr = Math.min(window.devicePixelRatio || 1, 2);
+      this.opt = Object.assign({ fill: '#fffafb', stroke: '#6b5560', ink: '#3d2f36', strokeWidth: 1.4 }, opt);
+      this._bind();
+      this.resize();
+    }
+    resize() {
+      const r = this.canvas.getBoundingClientRect();
+      const w = Math.max(120, r.width), h = Math.max(120, r.height);
+      this.canvas.width = w * this.dpr; this.canvas.height = h * this.dpr;
+      this.w = w; this.h = h;
+    }
+    _bind() {
+      let dragging = false, lx = 0, ly = 0;
+      const down = (x, y) => { dragging = true; lx = x; ly = y; };
+      const move = (x, y) => {
+        if (!dragging) return;
+        this.cam.rotateBy((x - lx) * 0.012, -(y - ly) * 0.012);
+        lx = x; ly = y; this.draw();
+      };
+      const up = () => { dragging = false; };
+      const el = this.canvas;
+      el.addEventListener('mousedown', (e) => down(e.clientX, e.clientY));
+      window.addEventListener('mousemove', (e) => move(e.clientX, e.clientY));
+      window.addEventListener('mouseup', up);
+      el.addEventListener('touchstart', (e) => { const t = e.touches[0]; down(t.clientX, t.clientY); }, { passive: true });
+      el.addEventListener('touchmove', (e) => { const t = e.touches[0]; move(t.clientX, t.clientY); e.preventDefault(); }, { passive: false });
+      el.addEventListener('touchend', up);
+      el.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        this.cam.zoom *= (e.deltaY > 0 ? 0.92 : 1.08);
+        this.cam.zoom = Math.max(0.4, Math.min(3, this.cam.zoom));
+        this.draw();
+      }, { passive: false });
+    }
+    setFaces(faces) {
+      this.faces = faces.map((f) => {
+        const g = Object.assign({}, f);
+        g.center = V.add(f.center, this.offset);
+        g.pts = (f.pts || C3.facePoly(f)).map((p) => V.add(p, this.offset));
+        return g;
+      });
+    }
+    fit(scale = 0.82) {
+      if (!this.faces.length) return;
+      const m = measure(this.faces, this.cam);
+      this._size = Math.min((this.w * scale) / (m.w || 1), (this.h * scale) / (m.h || 1));
+      this._cx = this.w / 2 - (m.minX + m.maxX) / 2 * this._size;
+      this._cy = this.h / 2 - (m.minY + m.maxY) / 2 * this._size;
+    }
+    draw() {
+      const ctx = this.ctx, o = this.opt;
+      if (!this.w) this.resize();
+      ctx.save();
+      ctx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
+      ctx.clearRect(0, 0, this.w, this.h);
+      if (!this._size) this.fit();
+      const size = this._size, cx = this._cx, cy = this._cy;
+      const cam = this.cam;
+      const sorted = this.faces.slice().sort((a, b) => V.dot(a.center, cam.f) - V.dot(b.center, cam.f));
+      for (const f of sorted) {
+        const nd = V.dot(f.normal, cam.f);
+        if (nd <= 1e-6 && !this.opt.showAll) continue;
+        const pts = f.pts.map((p) => cam.project(p, size, cx, cy));
+        ctx.beginPath();
+        ctx.moveTo(pts[0][0], pts[0][1]);
+        for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+        ctx.closePath();
+        ctx.fillStyle = f.color || o.fill;
+        ctx.globalAlpha = f.opacity != null ? f.opacity : 1;
+        ctx.fill();
+        ctx.globalAlpha = 1;
+        ctx.strokeStyle = o.stroke; ctx.lineWidth = o.strokeWidth; ctx.lineJoin = 'round';
+        ctx.stroke();
+        // 图案
+        const pat = PT.get(f.pattern);
+        if (pat && pat.d) {
+          const C = cam.project(f.center, size, cx, cy);
+          const U = cam.projectDir(f.U, size);
+          const Vv = cam.projectDir(f.V, size);
+          ctx.save();
+          ctx.transform(U[0], U[1], Vv[0], Vv[1], C[0], C[1]);
+          if (f.patternRot) ctx.rotate(f.patternRot * Math.PI / 180);
+          const p2 = new Path2D(pat.d);
+          ctx.fillStyle = f.patternColor || o.ink;
+          ctx.fill(pat.evenodd ? p2 : p2, pat.evenodd ? 'evenodd' : 'nonzero');
+          ctx.restore();
+        }
+      }
+      ctx.restore();
+    }
+  }
+
+  const API = {
+    facesToSVG, netToSVG, cubeToSVG, voxelFaces, voxelsToSVG,
+    viewCells, viewCellsSVG, gridToSVG, VIEW_AXES, VIEW_CN,
+    sectionOf, sectionToSVG, Scene, Camera, measure
+  };
+  if (typeof module !== 'undefined' && module.exports) module.exports = API;
+  root.Render = API;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+;
+;
+/* ===== questions.js ===== */
+/* ============================================================
+ *  questions.js  ——  六大题型生成器
+ *
+ *  设计原则：题干与选项均由几何引擎渲染，正确答案由模型计算得出，
+ *  干扰项由"对可见信息做定向篡改"生成并逐项校验互不相同，
+ *  因此不存在答案错误或选项重复的可能。
+ *
+ *  题型：
+ *    fold    折纸盒（展开图 -> 立体）
+ *    unfold  拆纸盒（立体 -> 展开图）
+ *    view3   三视图 / 视图判断
+ *    section 截面图（一刀切）
+ *    stack   堆积与拼合（俯视图数字 -> 立体）
+ *    rotate  空间旋转
+ * ========================================================== */
+(function (root) {
+  'use strict';
+  const C3 = root.Core3D || require('./core3d.js');
+  const CN = root.CubeNet || require('./cube.js');
+  const PT = root.Patterns || require('./patterns.js');
+  const RD = root.Render || require('./render.js');
+  const { V, Camera } = C3;
+
+  /* ---------- 可复现随机数 ---------- */
+  function mulberry32(a) {
+    return function () {
+      a |= 0; a = a + 0x6D2B79F5 | 0;
+      let t = Math.imul(a ^ a >>> 15, 1 | a);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+  const pick = (rng, arr) => arr[Math.floor(rng() * arr.length)];
+  function shuffle(rng, arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rng() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+    return a;
+  }
+  function hashStr(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+
+  /* ---------- 通用小工具 ---------- */
+  const clone = (o) => JSON.parse(JSON.stringify(o));
+
+  function randomCam(rng) {
+    // 若干"舒服"的等距视角
+    const yaws = [-Math.PI * 0.75, -Math.PI * 0.25, Math.PI * 0.25, Math.PI * 0.75];
+    return new Camera({ yaw: pick(rng, yaws), pitch: 0.55 + rng() * 0.18 });
+  }
+  function visibleFaces(cam) {
+    return CN.cubeFacesFinal({}, 1).filter((f) => V.dot(f.normal, cam.f) > 0.05).map((f) => f.faceKey);
+  }
+
+  /** 给 6 个面分配互不相同的图案，保证足够多的方向性图案 */
+  function assignPatterns(rng, diff) {
+    const dirPool = shuffle(rng, PT.DIRECTIONAL.filter((k) => k !== 'blank'));
+    const symPool = shuffle(rng, PT.IDS.filter((k) => PT.P[k].symmetric && k !== 'blank'));
+    const nDir = diff === 'hard' ? 5 : diff === 'easy' ? 3 : 4;
+    const chosen = dirPool.slice(0, nDir).concat(symPool.slice(0, 6 - nDir));
+    const keys = shuffle(rng, CN.FACE_KEYS);
+    const pats = {};
+    keys.forEach((k, i) => { pats[k] = chosen[i % chosen.length]; });
+    // 去重保证
+    const used = new Set();
+    for (const k of CN.FACE_KEYS) {
+      if (used.has(pats[k])) {
+        const rest = PT.IDS.filter((p) => !used.has(p) && p !== 'blank');
+        pats[k] = rest.length ? rest[Math.floor(rng() * rest.length)] : 'circle';
+      }
+      used.add(pats[k]);
+    }
+    return pats;
+  }
+  const patName = (id) => PT.get(id).cn;
+
+  /** 展开图随机朝向（旋转/镜像），增加题目变化 */
+  function transformCells(cells, rng) {
+    let cs = clone(cells);
+    const times = Math.floor(rng() * 4);
+    for (let i = 0; i < times; i++) cs = cs.map(([r, c]) => [c, -r]);
+    if (rng() < 0.5) cs = cs.map(([r, c]) => [r, -c]);
+    // 归一化
+    let mr = Infinity, mc = Infinity;
+    for (const [r, c] of cs) { mr = Math.min(mr, r); mc = Math.min(mc, c); }
+    return cs.map(([r, c]) => [r - mr, c - mc]);
+  }
+
+  /* ============================================================
+   *  题型一：折纸盒（展开图 -> 立体）
+   * ========================================================== */
+  function genFold(rng, diff) {
+    const layouts = Object.keys(CN.CLASSIC_LAYOUTS);
+    let net = null, lk = null;
+    for (let i = 0; i < 60 && !net; i++) {
+      lk = pick(rng, layouts);
+      net = CN.buildNetFromLayout(transformCells(CN.CLASSIC_LAYOUTS[lk].cells, rng));
+    }
+    if (!net) net = CN.buildNetFromLayout(CN.CLASSIC_LAYOUTS.net7.cells);
+    const pats = assignPatterns(rng, diff);
+    const cam = randomCam(rng);
+    const vis = visibleFaces(cam);
+
+    const stem = RD.netToSVG(net, pats, { cell: diff === 'easy' ? 48 : 42, labelFaces: false });
+    const correct = RD.cubeToSVG(pats, { cam, width: 168, height: 168 });
+
+    // 三个干扰项：交换可见面图案 / 旋转某可见面 / 换成相对面的图案
+    const mkVariant = (kind) => {
+      const p = clone(pats);
+      const rot = {};
+      let a = pick(rng, vis);
+      let note = '';
+      if (kind === 'swap') {
+        const b = pick(rng, vis.filter((k) => k !== a));
+        [p[a], p[b]] = [p[b], p[a]];
+        note = `把${CN.faceLabel(a)}面与${CN.faceLabel(b)}面的图案对调了`;
+      } else if (kind === 'rotate') {
+        let tries = 0;
+        while (PT.get(p[a]).symmetric && tries++ < 12) a = pick(rng, vis);
+        if (PT.get(p[a]).symmetric) return null;
+        rot[a] = 90;
+        note = `把${CN.faceLabel(a)}面的${patName(p[a])}转了 90°`;
+      } else {
+        const opp = CN.OPPOSITE[a];
+        p[a] = pats[opp];
+        note = `把${CN.faceLabel(a)}面换成了它的相对面（${CN.faceLabel(opp)}面）的图案`;
+      }
+      return { pats: p, rot, note };
+    };
+    const variants = [];
+    for (const kind of shuffle(rng, ['swap', 'rotate', 'opposite'])) {
+      const v = mkVariant(kind);
+      if (v) variants.push(v);
+    }
+    while (variants.length < 3) {
+      const v = mkVariant('swap');
+      if (v) variants.push(v);
+    }
+
+    const items = [{
+      svg: correct, right: true, note: '与题干展开图的相邻关系、图案朝向完全一致'
+    }];
+    for (const v of variants.slice(0, 3)) {
+      const faces = CN.cubeFacesFinal(v.pats, 1);
+      for (const f of faces) { f.pts = C3.facePoly(f, 0.5); f.patternRot = v.rot[f.faceKey] || 0; }
+      items.push({ svg: RD.facesToSVG(faces, { cam, width: 168, height: 168 }), right: false, note: v.note });
+    }
+    // 去重校验
+    const seen = new Set(); const uniq = [];
+    for (const it of items) { if (!seen.has(it.svg)) { seen.add(it.svg); uniq.push(it); } }
+    const final = shuffle(rng, uniq.slice(0, 4));
+    const answer = final.findIndex((x) => x.right);
+    const wrongs = final.filter((x) => !x.right).map((x) => x.note);
+
+    const oppNote = `展开图中，${CN.faceLabel(vis[0])}面与${CN.faceLabel(CN.OPPOSITE[vis[0]])}面是相对面（相间/"Z"字两端），立体图中能且只能看到一个。`;
+    return {
+      type: 'fold', diff,
+      stem, options: final.map((x) => x.svg), answer,
+      stemText: '左边给定的是纸盒的外表面展开图，右边哪一项能由它折叠而成？',
+      explain: `【正确答案】${'ABCD'[answer]}\n\n【秒杀思路】\n1. 相对面排除：${oppNote}\n2. 相邻面定位：在展开图中找一个方向性强的面（如${patName(pats[vis[0]])}所在的${CN.faceLabel(vis[0])}面）画箭头，箭头上、下、左、右分别是哪个面，在立体图中必须完全一致。\n3. 逐项核对：\n${final.map((x, i) => `   ${'ABCD'[i]}：${x.right ? '一致，当选。' : x.note + '，排除。'}`).join('\n')}`,
+      methods: ['relative', 'arrow', 'publicEdge'],
+      tags: ['六面体', '折纸盒', CN.CLASSIC_LAYOUTS[lk].type]
+    };
+  }
+
+  /* ============================================================
+   *  题型二：拆纸盒（立体 -> 展开图）
+   * ========================================================== */
+  function genUnfold(rng, diff) {
+    const layouts = Object.keys(CN.CLASSIC_LAYOUTS);
+    let net = null, lk = null;
+    for (let i = 0; i < 60 && !net; i++) {
+      lk = pick(rng, layouts);
+      net = CN.buildNetFromLayout(transformCells(CN.CLASSIC_LAYOUTS[lk].cells, rng));
+    }
+    if (!net) net = CN.buildNetFromLayout(CN.CLASSIC_LAYOUTS.net7.cells);
+    const pats = assignPatterns(rng, diff);
+    const cam = randomCam(rng);
+    const vis = visibleFaces(cam);
+    const stem = RD.cubeToSVG(pats, { cam, width: 180, height: 180 });
+
+    const mkNet = (mut) => {
+      const p = clone(pats); const extra = {};
+      if (mut) {
+        const a = pick(rng, vis);
+        if (mut === 'swap') {
+          const b = pick(rng, vis.filter((k) => k !== a));
+          [p[a], p[b]] = [p[b], p[a]];
+        } else if (mut === 'rotate') {
+          extra[a + '_rot'] = 90;
+        } else {
+          p[a] = pats[CN.OPPOSITE[a]];
+        }
+      }
+      const q = Object.assign({}, p, extra);
+      return RD.netToSVG(net, q, { cell: 36 });
+    };
+    const right = mkNet(null);
+    const wrongSet = [];
+    for (const m of shuffle(rng, ['swap', 'rotate', 'opposite'])) {
+      const s = mkNet(m);
+      if (s !== right && !wrongSet.includes(s)) wrongSet.push(s);
+    }
+    const items = [{ svg: right, right: true }].concat(wrongSet.slice(0, 3).map((s) => ({ svg: s, right: false })));
+    const final = shuffle(rng, items);
+    const answer = final.findIndex((x) => x.right);
+    return {
+      type: 'unfold', diff,
+      stem, options: final.map((x) => x.svg), answer,
+      stemText: '左边给定的是纸盒的外表面（可见三个面），右边哪一项是它的展开图？',
+      explain: `【正确答案】${'ABCD'[answer]}\n\n【秒杀思路】\n1. 先在立体图上定三个可见面的相对位置：${vis.map((k) => CN.faceLabel(k) + '面').join('、')}。\n2. 在展开图中定位这三个面，用"箭头法"：在${CN.faceLabel(vis[0])}面（${patName(pats[vis[0]])}）上画箭头，其左右上下的面必须与立体图一致。\n3. 相对面在展开图中呈"相间排列"或"Z 字型两端"，折成立体后不可能相邻，据此可先排除 1～2 项。\n4. 本题为${CN.CLASSIC_LAYOUTS[lk].name}，属于${CN.CLASSIC_LAYOUTS[lk].type}。`,
+      methods: ['relative', 'arrow', 'publicPoint'],
+      tags: ['六面体', '拆纸盒', CN.CLASSIC_LAYOUTS[lk].type]
+    };
+  }
+
+  /* ============================================================
+   *  体素（小立方体堆叠）生成：保证稳定、连通
+   * ========================================================== */
+  function genVoxels(rng, opt = {}) {
+    const nx = opt.nx || 3, ny = opt.ny || 3, nz = opt.nz || (diff => 3)(opt.diff) || 3;
+    const maxZ = opt.maxZ || (opt.diff === 'easy' ? 2 : 3);
+    for (let attempt = 0; attempt < 80; attempt++) {
+      // 底层
+      const baseCount = 3 + Math.floor(rng() * (nx * ny - 2));
+      const all = [];
+      for (let x = 0; x < nx; x++) for (let y = 0; y < ny; y++) all.push([x, y]);
+      const base = shuffle(rng, all).slice(0, baseCount);
+      // 保证底层连通
+      if (!connectedXY(base)) continue;
+      const cells = base.map(([x, y]) => [x, y, 0]);
+      for (let z = 1; z < maxZ; z++) {
+        for (const [x, y] of all) {
+          if (!cells.some((c) => c[0] === x && c[1] === y && c[2] === z - 1)) continue;
+          if (rng() < 0.45) cells.push([x, y, z]);
+        }
+      }
+      if (cells.length < 4) continue;
+      if (cells.length > (opt.max || 16)) continue;
+      return cells;
+    }
+    return [[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 0], [1, 1, 1]];
+  }
+  function connectedXY(cells) {
+    if (!cells.length) return false;
+    const s = new Set(cells.map((c) => c[0] + ',' + c[1]));
+    const seen = new Set([cells[0][0] + ',' + cells[0][1]]);
+    const st = [cells[0]];
+    while (st.length) {
+      const [x, y] = st.pop();
+      for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+        const k = (x + dx) + ',' + (y + dy);
+        if (s.has(k) && !seen.has(k)) { seen.add(k); st.push([x + dx, y + dy]); }
+      }
+    }
+    return seen.size === cells.length;
+  }
+  const voxKey = (cells) => cells.map((c) => c.join(',')).sort().join('|');
+
+  /** 体素随机形变（用于补齐干扰项，保证与正解不同） */
+  function mutateVox(cells, rng) {
+    const c2 = clone(cells);
+    const m = rng();
+    if (m < 0.38 && c2.length > 3) {
+      c2.splice(Math.floor(rng() * c2.length), 1);
+    } else if (m < 0.72) {
+      const b = c2[Math.floor(rng() * c2.length)];
+      c2.push([b[0], b[1], b[2] + 1]);
+    } else {
+      const b = c2[Math.floor(rng() * c2.length)];
+      c2.push([b[0] + (rng() < 0.5 ? 1 : -1), b[1], b[2]]);
+    }
+    if (voxKey(c2) === voxKey(cells)) return null;
+    return c2;
+  }
+  /** 归一化体素坐标（平移到非负） */
+  function normVox(cells) {
+    let mx = Infinity, my = Infinity, mz = Infinity;
+    for (const c of cells) { mx = Math.min(mx, c[0]); my = Math.min(my, c[1]); mz = Math.min(mz, c[2]); }
+    return cells.map(([x, y, z]) => [x - mx, y - my, z - mz]);
+  }
+  function rotateVox(cells, axis, times) {
+    let out = clone(cells);
+    for (let t = 0; t < times; t++) {
+      out = out.map(([x, y, z]) => {
+        if (axis === 'z') return [-y, x, z];
+        if (axis === 'y') return [z, y, -x];
+        return [x, -z, y];
+      });
+    }
+    let mx = Infinity, my = Infinity, mz = Infinity;
+    for (const c of out) { mx = Math.min(mx, c[0]); my = Math.min(my, c[1]); mz = Math.min(mz, c[2]); }
+    return out.map(([x, y, z]) => [x - mx, y - my, z - mz]);
+  }
+
+  /* ============================================================
+   *  题型三：三视图 / 视图判断
+   * ========================================================== */
+  function genView(rng, diff) {
+    const cells = genVoxels(rng, { diff, max: diff === 'easy' ? 8 : 14 });
+    const cam = new Camera({ yaw: -Math.PI * 0.75, pitch: 0.62 });
+    const stem = RD.voxelsToSVG(cells, { cam, width: 200, height: 200 });
+    const views = ['front', 'top', 'left', 'right', 'back'];
+    const target = pick(rng, views);
+    const correct = RD.viewCellsSVG(cells, target, { cell: 26 });
+    const ckey = RD.viewCells(cells, target).map((c) => c.join(',')).sort().join('|');
+
+    const wrongs = [];
+    // 干扰 1：其他视图（形状不同者）
+    for (const v of shuffle(rng, views.filter((x) => x !== target))) {
+      const k = RD.viewCells(cells, v).map((c) => c.join(',')).sort().join('|');
+      if (k !== ckey) wrongs.push({ svg: RD.viewCellsSVG(cells, v, { cell: 26 }), why: `这是${RD.VIEW_CN[v]}，不是题目要求的${RD.VIEW_CN[target]}` });
+      if (wrongs.length >= 2) break;
+    }
+    // 干扰 2：增删一格；不足时用随机形变补齐
+    let cnt = 0;
+    while (wrongs.length < 3 && cnt++ < 120) {
+      const c2 = mutateVox(cells, rng);
+      if (!c2) continue;
+      const k = RD.viewCells(c2, target).map((c) => c.join(',')).sort().join('|');
+      if (k === ckey) continue;
+      const svg = RD.viewCellsSVG(c2, target, { cell: 26 });
+      if (wrongs.some((w) => w.svg === svg)) continue;
+      wrongs.push({ svg, why: '轮廓与题干立体的投影不符' });
+    }
+    const items = [{ svg: correct, right: true }].concat(wrongs.slice(0, 3).map((w) => ({ svg: w.svg, right: false, note: w.why })));
+    const seen = new Set(); const uniq = [];
+    for (const it of items) if (!seen.has(it.svg)) { seen.add(it.svg); uniq.push(it); }
+    const final = shuffle(rng, uniq.slice(0, 4));
+    const answer = final.findIndex((x) => x.right);
+    const dirWord = { front: '从前向后（主视图）', back: '从后向前（后视图）', top: '从上向下（俯视图）', left: '从左向右（左视图）', right: '从右向左（右视图）' }[target];
+    return {
+      type: 'view3', diff, stem, options: final.map((x) => x.svg), answer,
+      stemText: `左边给定的是由若干小正方体组成的多面体，${dirWord}观察，得到的视图是？`,
+      explain: `【正确答案】${'ABCD'[answer]}\n\n【秒杀思路】\n1. 三视图一定是"平面图"，选项中出现立体感的（如能看到顶面）直接排除。\n2. 原图有线才有线，原图没线就没线：把立体按${dirWord}压扁，每个位置只要有一个小方块就算一格。\n3. 被挡住的部分看不见——同一投影位置上有多个方块时，只算一格。\n4. 本题该方向投影共 ${RD.viewCells(cells, target).length} 个小方格，据此可先排除格数不符的选项。`,
+      methods: ['view', 'occlusion'],
+      tags: ['三视图', dirWord]
+    };
+  }
+
+  /* ============================================================
+   *  题型四：截面图（一刀切）
+   * ========================================================== */
+  const PLANES = [
+    { name: '水平切', p: [1.5, 1.5, 1], n: [0, 0, 1] },
+    { name: '竖直切', p: [1.5, 1.5, 1], n: [0, 1, 0] },
+    { name: '侧向切', p: [1.5, 1.5, 1], n: [1, 0, 0] },
+    { name: '斜 45°切', p: [1.5, 1.5, 1], n: [1, 0, 1] },
+    { name: '斜 45°切（反向）', p: [1.5, 1.5, 1], n: [1, 0, -1] },
+    { name: '对角切', p: [1.5, 1.5, 1], n: [1, 1, 0] },
+    { name: '对角切（反向）', p: [1.5, 1.5, 1], n: [1, -1, 0] },
+    { name: '斜切（三向）', p: [1.5, 1.5, 1], n: [1, 1, 1] }
+  ];
+  function genSection(rng, diff) {
+    const cells = genVoxels(rng, { diff, nx: 3, ny: 3, maxZ: diff === 'easy' ? 2 : 3, max: 12 });
+    const cam = new Camera({ yaw: -Math.PI * 0.75, pitch: 0.62 });
+    const stem = RD.voxelsToSVG(cells, { cam, width: 200, height: 200 });
+
+    // 生成若干真实截面（互不相同的形状）
+    const reals = [];
+    for (const pl of shuffle(rng, PLANES)) {
+      const p = { p: [1.5, 1.5, pl.p[2]], n: pl.n };
+      // 让平面穿过立体：把平面点投影到立体重心方向
+      const cen = cells.reduce((a, c) => [a[0] + c[0] + 0.5, a[1] + c[1] + 0.5, a[2] + c[2] + 0.5], [0, 0, 0]).map((x) => x / cells.length);
+      const pn = V.norm(pl.n);
+      const pp = V.add(cen, V.mul(pn, 0.0));
+      const sec = RD.sectionOf(cells, { p: pp, n: pn }, { step: 0.06 });
+      const r = RD.sectionToSVG(sec, { scale: 30 });
+      if (r.svg && r.comps === 1 && r.area > 0.2) {
+        const sig = r.pathD.length + '|' + r.area.toFixed(2);
+        if (!reals.some((x) => x.sig === sig)) reals.push({ ...r, sig, plane: pl.name });
+      }
+      if (reals.length >= 3) break;
+    }
+    if (reals.length < 1) return null;
+
+    // 干扰项：绝对截不出的形状
+    const fake = (() => {
+      // 两块分离（一刀切对单连通立体只会得到一个连通面）
+      const g = [[0, 0], [1, 0], [3, 0], [4, 0], [0, 1], [1, 1], [3, 1], [4, 1]];
+      return RD.gridToSVG(g, { cell: 22 });
+    })();
+    const items = reals.slice(0, 3).map((r) => ({ svg: r.svg, right: false }));
+    const pickTrue = rng() < 0.5; // 一半出"可能"、一半出"不可能"
+    let final, answer, q;
+    if (pickTrue && reals.length >= 1) {
+      // 问"可能是截面"：1 真 + 3 假
+      const falses = [fake,
+      RD.gridToSVG([[0, 0], [1, 0], [2, 0], [0, 1], [0, 2]], { cell: 22 }),   // 直角三角形
+      RD.gridToSVG([[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [0, 1], [0, 2], [0, 3]], { cell: 22 })]; // L 形长条
+      final = shuffle(rng, [{ svg: reals[0].svg, right: true }].concat(falses.slice(0, 3).map((s) => ({ svg: s, right: false }))));
+      q = '以下哪一项可能是该多面体的截面？';
+    } else {
+      final = shuffle(rng, items.concat([{ svg: fake, right: true }]));
+      q = '以下哪一项不可能是该多面体的截面？';
+    }
+    answer = final.findIndex((x) => x.right);
+    return {
+      type: 'section', diff, stem, options: final.map((x) => x.svg), answer,
+      stemText: `左边给定的是一个多面体，将其从任一面剖开（一刀切），${q}`,
+      explain: `【正确答案】${'ABCD'[answer]}\n\n【秒杀思路】\n1. 一刀切原则：一个平面切下去，截面必然是**一个连通的**平面图形，切不出分离的两块。\n2. 由小正方体组成的多面体，截面一定是**直线段围成的多边形**，绝不会出现曲线。\n3. 正方体截面最多六边形；切出的三角形一定是锐角三角形（不可能是直角或钝角三角形）。\n4. 镂空/凹陷处，截面会相应出现缺口，要分层核对。`,
+      methods: ['section', 'onecut'],
+      tags: ['截面图', '一刀切']
+    };
+  }
+
+  /* ============================================================
+   *  题型五：堆积与拼合（俯视图数字 -> 立体）
+   * ========================================================== */
+  function genStack(rng, diff) {
+    const cells = genVoxels(rng, { diff, max: diff === 'easy' ? 8 : 13 });
+    const cam = new Camera({ yaw: -Math.PI * 0.75, pitch: 0.62 });
+    // 俯视图数字
+    const height = new Map();
+    for (const [x, y, z] of cells) height.set(x + ',' + y, Math.max(height.get(x + ',' + y) || 0, z + 1));
+    const grid = [], nums = [];
+    for (const [k, v] of height) { const [x, y] = k.split(',').map(Number); grid.push([x, y]); nums.push([x, y, v]); }
+    const stem = topNumberSVG(nums);
+    const correct = RD.voxelsToSVG(cells, { cam, width: 190, height: 190 });
+    const ckey = voxKey(cells);
+
+    const wrongs = [];
+    let guard = 0;
+    while (wrongs.length < 3 && guard++ < 120) {
+      const c2 = mutateVox(cells, rng);
+      if (!c2) continue;
+      const svg = RD.voxelsToSVG(c2, { cam, width: 190, height: 190 });
+      if (svg === correct || wrongs.some((w) => w.svg === svg)) continue;
+      wrongs.push({ svg, note: c2.length > cells.length ? '多了一个方块' : '少了一个方块' });
+    }
+    const final = shuffle(rng, [{ svg: correct, right: true }].concat(wrongs.slice(0, 3)));
+    const answer = final.findIndex((x) => x.right);
+    const total = cells.length;
+    return {
+      type: 'stack', diff, stem, options: final.map((x) => x.svg), answer,
+      stemText: '下图是该多面体的俯视图，方格中的数字表示该位置叠放的小正方体个数，该多面体是？',
+      explain: `【正确答案】${'ABCD'[answer]}\n\n【秒杀思路】\n1. 先数总数：把俯视图各格数字相加 = ${total} 个小正方体，先排除总数不符的选项（最快）。\n2. 再定最高点：最大的数字是 ${Math.max(...nums.map((n) => n[2]))}，对应位置必须有这么高的一摞。\n3. 分层核对：从最上层往下看，逐层确认凸起的位置与数字分布一致。\n4. 凹凸一致原则：有凸必有凹，拼合时优先看特殊块（最高的一摞、孤立的一摞）。`,
+      methods: ['stack', 'count', 'concave'],
+      tags: ['堆积拼合', '俯视图']
+    };
+  }
+  function topNumberSVG(nums) {
+    let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+    for (const [x, y] of nums) { minX = Math.min(minX, x); maxX = Math.max(maxX, x); minY = Math.min(minY, y); maxY = Math.max(maxY, y); }
+    const cell = 40, W = (maxX - minX + 1) * cell + 10, H = (maxY - minY + 1) * cell + 10;
+    const out = [`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" class="fig">`];
+    const map = new Map(nums.map((n) => [n[0] + ',' + n[1], n[2]]));
+    for (let x = minX; x <= maxX; x++) for (let y = minY; y <= maxY; y++) {
+      const px = 5 + (x - minX) * cell, py = 5 + (y - minY) * cell;
+      const v = map.get(x + ',' + y);
+      out.push(`<rect x="${px}" y="${py}" width="${cell}" height="${cell}" fill="#fffafb" stroke="#5b4750" stroke-width="1.3"/>`);
+      if (v) out.push(`<text x="${px + cell / 2}" y="${py + cell / 2 + 6}" font-size="18" font-weight="600" fill="#3d2f36" text-anchor="middle">${v}</text>`);
+    }
+    out.push('</svg>');
+    return out.join('');
+  }
+
+  /* ============================================================
+   *  题型六：空间旋转
+   * ========================================================== */
+  function genRotate(rng, diff) {
+    const cells = genVoxels(rng, { diff, max: diff === 'easy' ? 7 : 11, maxZ: diff === 'easy' ? 2 : 3 });
+    const cam = new Camera({ yaw: -Math.PI * 0.75, pitch: 0.62 });
+    const stem = RD.voxelsToSVG(cells, { cam, width: 190, height: 190 });
+    const axis = pick(rng, ['z', 'y', 'x']);
+    const dir = rng() < 0.5 ? 1 : 3; // 顺时针 / 逆时针
+    const rightCells = rotateVox(cells, axis, dir);
+    const rightSvg = RD.voxelsToSVG(rightCells, { cam, width: 190, height: 190 });
+    const axisCn = { z: '竖直轴', y: '前后轴', x: '左右轴' }[axis];
+    const dirCn = dir === 1 ? '顺时针' : '逆时针';
+
+    const wrongs = [];
+    const mirror = normVox(cells.map(([x, y, z]) => [-x, y, z]));
+    const cands = [mirror, rotateVox(cells, axis, dir === 1 ? 2 : 2), rotateVox(cells, axis, dir === 1 ? 3 : 1), rotateVox(cells, axis, 2)];
+    for (const c2 of cands) {
+      const svg = RD.voxelsToSVG(c2, { cam, width: 190, height: 190 });
+      if (svg !== rightSvg && !wrongs.includes(svg)) wrongs.push(svg);
+    }
+    let guard = 0;
+    while (wrongs.length < 3 && guard++ < 100) {
+      const c2 = mutateVox(cells, rng);
+      if (!c2) continue;
+      const svg = RD.voxelsToSVG(normVox(c2), { cam, width: 190, height: 190 });
+      if (svg === rightSvg || wrongs.includes(svg)) continue;
+      wrongs.push(svg);
+    }
+    const final = shuffle(rng, [{ svg: rightSvg, right: true }].concat(wrongs.slice(0, 3).map((s) => ({ svg: s, right: false }))));
+    const answer = final.findIndex((x) => x.right);
+    return {
+      type: 'rotate', diff, stem, options: final.map((x) => x.svg), answer,
+      stemText: `将左边的多面体绕${axisCn}${dirCn}旋转 90° 后，得到的图形是？`,
+      explain: `【正确答案】${'ABCD'[answer]}\n\n【秒杀思路】\n1. 抓特征块：先找立体中最"特别"的一块（最高的一摞、最孤立的凸起、拐角），盯住它转，别整块硬想。\n2. 旋转不改变：方块总数（${cells.length} 个）、各块的相对位置与连接关系。\n3. 旋转会改变：朝向。左右镜像不能由旋转得到——若某选项与题干成镜像关系，直接排除。\n4. 用"分层法"：先看最上层转到了哪，再看下层。`,
+      methods: ['rotate', 'feature'],
+      tags: ['空间旋转', axisCn]
+    };
+  }
+
+  /* ============================================================
+   *  统一入口
+   * ========================================================== */
+  const GENS = { fold: genFold, unfold: genUnfold, view3: genView, section: genSection, stack: genStack, rotate: genRotate };
+  const TYPE_INFO = {
+    fold: { cn: '折纸盒', desc: '展开图 → 立体图', icon: '📦' },
+    unfold: { cn: '拆纸盒', desc: '立体图 → 展开图', icon: '🧊' },
+    view3: { cn: '三视图', desc: '立体 → 正投影视图', icon: '👁' },
+    section: { cn: '截面图', desc: '一刀切的截面形状', icon: '🔪' },
+    stack: { cn: '堆积拼合', desc: '俯视图数字 → 立体', icon: '🧱' },
+    rotate: { cn: '空间旋转', desc: '绕轴旋转后的形态', icon: '🔄' }
+  };
+  const DIFFS = {
+    easy: { cn: '入门', w: 1 },
+    normal: { cn: '标准', w: 1 },
+    hard: { cn: '进阶', w: 1 }
+  };
+
+  /** 题目合格性校验（选项必须 4 个且互不相同、答案有效） */
+  function valid(q) {
+    if (!q || !q.stem || !q.explain) return false;
+    if (!q.options || q.options.length !== 4) return false;
+    if (new Set(q.options).size !== 4) return false;
+    if (!(q.answer >= 0 && q.answer <= 3)) return false;
+    if (q.options.some((o) => !o || o.length < 40)) return false;
+    return true;
+  }
+
+  const cache = new Map();
+  function build(type, seed, diff) {
+    const key = type + '-' + seed + '-' + (diff || 'normal');
+    if (cache.has(key)) return cache.get(key);
+    const rng = mulberry32(hashStr(key));
+    const d = diff || pick(rng, ['easy', 'normal', 'normal', 'hard']);
+    let q = null;
+    for (let i = 0; i < 16 && !q; i++) {
+      let cand = null;
+      try { cand = GENS[type](mulberry32(hashStr(key + ':' + i)), d); } catch (e) { cand = null; }
+      if (valid(cand)) q = cand;
+    }
+    if (!q) q = { type, diff: d, stem: '', options: [], answer: 0, explain: '本题生成失败，请换一题', bad: true, stemText: '题目生成失败', methods: [], tags: [] };
+    q.id = key;
+    q.type = type; q.typeCn = TYPE_INFO[type].cn; q.diff = d;
+    q.seed = seed;
+    q.source = '引擎生成';
+    cache.set(key, q);
+    return q;
+  }
+
+  /** 生成一批题（用于练习/组卷） */
+  function makeSet(types, n, startSeed, diff) {
+    const out = [];
+    let s = startSeed || 1;
+    let guard = 0;
+    while (out.length < n && guard++ < n * 8) {
+      const t = types[out.length % types.length];
+      const q = build(t, s++, diff);
+      if (!out.some((x) => x.id === q.id)) out.push(q);
+    }
+    return out;
+  }
+
+  const API = { build, makeSet, GENS, TYPE_INFO, DIFFS, mulberry32, hashStr, genVoxels, rotateVox, voxKey, topNumberSVG };
+  if (typeof module !== 'undefined' && module.exports) module.exports = API;
+  root.Questions = API;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+;
+;
+/* ===== methods.js ===== */
+/* ============================================================
+ *  methods.js  ——  立体图形推理「通用解法体系」
+ *
+ *  选取标准：只收录满足三条的方法——
+ *    ① 通用（能覆盖一类题而非一道题）
+ *    ② 高效（考场 40 秒内能落地）
+ *    ③ 正确（有明确判据，不靠纯空间想象）
+ *  每个方法包含：适用判定 / 操作步骤 / 口诀 / 易错点 / 配套训练题型
+ * ========================================================== */
+(function (root) {
+  'use strict';
+
+  const METHODS = [
+    {
+      id: 'relative',
+      name: '相对面排除法',
+      level: 1,
+      priority: 10,
+      types: ['fold', 'unfold'],
+      when: '题干或选项里出现六面体（立方体）展开图 / 立体图，优先第一刀。',
+      steps: [
+        '在展开图上找相对面：① **相间排列**（同行或同列中间只隔一格）；② **"Z"字型两端**（画 Z 字，中间只能隔一行或一列）。',
+        '记住：相对的两个面，在立体图中**能且只能看到一个**，永远不可能相邻。',
+        '扫读选项：只要某个立体图里同时出现了两个相对面，直接排除。',
+        '通常这一步就能干掉 1～2 个选项，剩下再用箭头法。'
+      ],
+      chant: '相间 Z 端必相对，相对不能同时见。',
+      trap: '注意"Z 字中间只能隔一行/一列"，隔两行就不成立；1-4-1 型中间那一行两端的两个面是**相邻**而非相对，这是最高频的坑。',
+      demo: 'net-relative'
+    },
+    {
+      id: 'arrow',
+      name: '单面箭头法',
+      level: 1,
+      priority: 9,
+      types: ['fold', 'unfold'],
+      when: '排除相对面后仍有 2 个以上选项；选项里出现同一个特征面时首选。',
+      steps: [
+        '挑一个**出现次数最多、且非中心对称**（有明确方向）的面，例如三角形、箭头、L 形、半填充。',
+        '在这个面上画一支箭头，方向自己定（一旦定下，题干和所有选项都要保持一致）。',
+        '以箭头指向为"上"，记下该面的**上、下、左、右**分别是哪个面。',
+        '在展开图上做同样的操作，逐一比对选项；只要有一处不同，立即排除。'
+      ],
+      chant: '定面定箭头，上下左右一起走；哪里不符哪里走。',
+      trap: '箭头法只看"某个位置是哪个面"，**不关心图案自身的指向**（那是时针法才考虑的）。面必须非中心对称，否则方向定不下来。',
+      demo: 'arrow'
+    },
+    {
+      id: 'arrow2',
+      name: '双面箭头法',
+      level: 2,
+      priority: 7,
+      types: ['fold', 'unfold'],
+      when: '面上的图案是中心对称的（圆、正方形、十字），单面箭头定不了方向。',
+      steps: [
+        '找一个面作为**起点**，再找另一个面作为**终点**，从起点向终点画一支箭头。',
+        '观察第三个面落在这支箭头的哪一侧（左侧 / 右侧）。',
+        '在展开图中做同样操作，方向或左右关系不一致的排除。',
+        '双面箭头还能判定图案自身的摆法：例如"长方形的长边与箭头垂直"。'
+      ],
+      chant: '一面定不了就两面，起点终点连成线，第三面在左还是右。',
+      trap: '起点面与终点面在题干中必须是**确定的两个面**，不能随便挑；若两个面在展开图中不相邻，需先平移相邻。',
+      demo: 'arrow2'
+    },
+    {
+      id: 'clock',
+      name: '时针法',
+      level: 2,
+      priority: 6,
+      types: ['fold', 'unfold'],
+      when: '出现三个相邻面，且想快速判定它们的"环绕顺序"。',
+      steps: [
+        '在三个相邻面上按某个顺序（如 A→B→C）连一条路径。',
+        '判断这条路径是顺时针还是逆时针。',
+        '展开图与立体图中的时针方向必须**完全一致**，不一致即错。'
+      ],
+      chant: '三点连成圈，顺逆不能变。',
+      trap: '时针法只判断"是哪个面"的顺序，**不看图案自身的方向**；图案自身方向要用箭头法。两者经常需要配合。',
+      demo: 'clock'
+    },
+    {
+      id: 'publicEdge',
+      name: '公共边法',
+      level: 2,
+      priority: 8,
+      types: ['fold', 'unfold'],
+      when: '面上线条、对角线较多，位置关系靠"边"来锁定。',
+      steps: [
+        '找到两个相邻面的**公共边**（在展开图中是那条重合的折痕，在立体图中是那条棱）。',
+        '看每个面的图案与这条公共边的关系：图案的哪条边贴着公共边？线条是否从公共边发出？',
+        '展开图与立体图这两者必须完全对应，否则排除。'
+      ],
+      chant: '找公共边，看谁贴着它；贴错了，整项都错。',
+      trap: '展开图中"一行四个面首尾两端的两个面"平移后可以相邻，此时公共边要重新找，别漏了这种"隐藏公共边"。',
+      demo: 'publicEdge'
+    },
+    {
+      id: 'publicPoint',
+      name: '公共点法',
+      level: 3,
+      priority: 6,
+      types: ['fold', 'unfold'],
+      when: '三个面交于一点，且从该点发出若干线条（近年高频）。',
+      steps: [
+        '锁定三个面的**公共顶点**。',
+        '数一数从该点发出的线有几条、什么样式（实线/虚线/对角线）。',
+        '确认每条线分别落在哪个面上。',
+        '与题干逐条比对，任一条不符即排除。'
+      ],
+      chant: '三点共一点，数线看样式，一条不对就出局。',
+      trap: '展开图里三个面未必画在一起，要先把它们"移"到公共点附近再数（1-4-1 型中，中间行两端可平移相邻）。',
+      demo: 'publicPoint'
+    },
+    {
+      id: 'rubber',
+      name: '橡皮法（画橡皮）',
+      level: 1,
+      priority: 5,
+      types: ['fold', 'unfold'],
+      when: '每个面上只有少量线段、或有相同的面，纯想象容易乱时的兜底法。',
+      steps: [
+        '把橡皮（或草稿纸上的小方块）当作纸盒，按题干把 6 个面的图案依次画上去。',
+        '转动橡皮，逐项与题干 / 选项比对。',
+        '适合考场最后复核，不适合作为首选（慢）。'
+      ],
+      chant: '想象不出来就画出来。',
+      trap: '画的时候务必按"外表面"来画，画反了会全错；平时练习用它建立空间感，考场上要尽量用箭头法提速。',
+      demo: null
+    },
+    {
+      id: 'view',
+      name: '三视图判定法',
+      level: 1,
+      priority: 9,
+      types: ['view3'],
+      when: '题干给出立体图形，问某个方向的视图。',
+      steps: [
+        '**第一判据**：三视图一定是平面图。选项里凡是能看到"顶面"的（有立体感），直接排除。',
+        '**第二判据**：原图有线才有线，原图没线就没线。',
+        '把立体沿观察方向"压扁"，每个投影位置只要有一个方块就算一格。',
+        '注意出题人不一定按正方向考，右视图、仰视图都可能考，先看清题目要求。'
+      ],
+      chant: '视图必是平面图，有线才有线，无线别乱添。',
+      trap: '被挡住的部分看不见：同一投影位置叠了多个方块，只算一格，也不会多出内部的线。',
+      demo: 'view'
+    },
+    {
+      id: 'occlusion',
+      name: '遮挡与虚实线',
+      level: 2,
+      priority: 5,
+      types: ['view3'],
+      when: '视图中出现虚线、或需要判断内部结构是否可见。',
+      steps: [
+        '沿视线方向，先被看到的挡住后面的。',
+        '题干已给的视图里如果画了虚线，你的答案也要一致；题干用实线，你也别改。',
+        '立体上有曲线时：视线方向与曲线在同一水平线上，看到的是**直线**。'
+      ],
+      chant: '挡住就是看不见，虚实跟着题干走。',
+      trap: '别把"被挡住的轮廓"画成实线；也别自作主张把虚线改实线。',
+      demo: null
+    },
+    {
+      id: 'section',
+      name: '截面一刀切原则',
+      level: 2,
+      priority: 10,
+      types: ['section'],
+      when: '问"哪一项可能是 / 不可能是该立体的截面"。',
+      steps: [
+        '**一刀切**：一个平面切下去，截面必然是**一个连通的整体**，绝不可能切出分离的两块。',
+        '**直线原则**：多面体的截面一定是直线段围成的多边形，出现曲线的直接排除。',
+        '**边数上限**：正方体截面最多六边形；立方体切出的三角形一定是**锐角三角形**（直角/钝角三角形不可能）。',
+        '**空心原则**：立体内部镂空，截面相应位置就是空的（有缺口）。'
+      ],
+      chant: '一刀切出一片，直线不成曲；三角必锐角，六边是上限。',
+      trap: '注意区分"截面"和"剖面"：截面只是被切到的那个面的形状，不是剩下部分的形状。',
+      demo: 'section'
+    },
+    {
+      id: 'onecut',
+      name: '基础体截面速查',
+      level: 1,
+      priority: 6,
+      types: ['section'],
+      when: '需要快速判断某个形状能不能被切出来。',
+      steps: [
+        '正方体：平切→正方形/矩形；斜切→梯形；对角切→六边形；切一角→三角形（锐角）。',
+        '圆柱：横切→圆；竖切→矩形；斜切→椭圆（两侧是曲线，不是直线）。',
+        '圆锥：过顶点切→等腰三角形；不过顶点斜切→椭圆/抛物线形。',
+        '组合体：拆成基础图形分别判断，再合并。'
+      ],
+      chant: '圆柱斜切是椭圆，圆锥过顶等腰三角。',
+      trap: '圆柱从上往下斜着切，两侧是**曲线**不是直线，这是最爱考的细节。',
+      demo: null
+    },
+    {
+      id: 'stack',
+      name: '分层计数法',
+      level: 1,
+      priority: 8,
+      types: ['stack'],
+      when: '给出俯视图（带数字）或立体图，问总数 / 选对应立体。',
+      steps: [
+        '**先数总数**：把俯视图各格数字加总，选项是立体图时先数块数，块数不符直接排除（最快）。',
+        '**再定最高点**：数字最大的位置必须有那么高的一摞。',
+        '**分层核对**：从最上层往下看，逐层确认凸起位置。',
+        '**交叉验证**：正视图与俯视图交叉核对每层的方块数。'
+      ],
+      chant: '先总数，再最高，最后分层核。',
+      trap: '别忘了被上层遮住的方块：看得见的方块数 ≠ 总块数。',
+      demo: 'stack'
+    },
+    {
+      id: 'concave',
+      name: '凹凸一致原则',
+      level: 2,
+      priority: 7,
+      types: ['stack'],
+      when: '立体拼合题：残缺图形 + 选项拼成完整立体。',
+      steps: [
+        '**有凹必有凸，有凸必有凹**：凹进去的形状与凸出来的形状必须相同。',
+        '**长度相同**：凹凸对应的边长也要一致。',
+        '先观察特殊的"凹凸"部分，通常能先排除 1～2 项。',
+        '若不满足，试着把题干或选项**旋转/翻转**后再验证。'
+      ],
+      chant: '有凹必有凸，凹凸要等长。',
+      trap: '无需整体拼合成功才选，只需盯住特殊凹凸处；旋转翻转后仍要满足凹凸一致。',
+      demo: null
+    },
+    {
+      id: 'count',
+      name: '数块排除法',
+      level: 1,
+      priority: 7,
+      types: ['stack'],
+      when: '选项的小方块数量不同（近年的命题趋势，送分点）。',
+      steps: [
+        '数出题干完整立体的小方块总数 N。',
+        '数出已知的几个残缺图形的方块数 n1、n2、n3。',
+        '问号处应为 N − n1 − n2 − n3，据此秒选。'
+      ],
+      chant: '块数不同先数块，减一减就出答案。',
+      trap: '灰色块、特殊块也要计入总数；别漏数被挡住的块。',
+      demo: null
+    },
+    {
+      id: 'rotate',
+      name: '特征块旋转法',
+      level: 2,
+      priority: 8,
+      types: ['rotate'],
+      when: '题干要求把立体绕某轴旋转一定角度。',
+      steps: [
+        '**抓特征块**：先锁定最特别的一块（最高的一摞、最孤立的凸起、拐角块），盯住它转。',
+        '**旋转不变**：方块总数、各块的相对位置与连接关系都不变——变了就排除。',
+        '**旋转会变**：朝向变了。若某选项与题干成**镜像**关系，旋转得不到，直接排除。',
+        '**分层转**：先看最上层转到哪，再看下层。'
+      ],
+      chant: '盯住特征块，旋转不改数，镜像不能转出来。',
+      trap: '旋转 ≠ 翻转。左右镜像无法由旋转得到，这是最常见的陷阱选项。',
+      demo: 'rotate'
+    },
+    {
+      id: 'feature',
+      name: '特殊块优先法',
+      level: 2,
+      priority: 6,
+      types: ['rotate', 'stack'],
+      when: '立体中出现颜色不同、位置特殊的块。',
+      steps: [
+        '先确定特殊块（如灰色块）的位置，再观察选项。',
+        '优先拼合/比对特殊块所在的那一摞。',
+        '确定一部分后，剩下的用"分层"去找缺块。'
+      ],
+      chant: '特殊块先定位，剩下的分层填。',
+      trap: '特殊块可能被其他块遮住一部分，注意立体图中的可见性。',
+      demo: null
+    },
+    {
+      id: 'net11',
+      name: '11 种展开图认知',
+      level: 1,
+      priority: 9,
+      types: ['fold', 'unfold'],
+      when: '打基础阶段：先建立"哪些形状能折成立方体"的直觉。',
+      steps: [
+        '记住分类：1-4-1 型 6 种、2-3-1 型 3 种、2-2-2 型 1 种、3-3 型 1 种，共 11 种。',
+        '**快速判否口诀**：出现"田"字形（2×2 方块）一定折不成；一排超过 4 个也折不成。',
+        '展开图一定只有 5 条公共边、且不能形成闭环。',
+        '在「3D 实验室·折叠」里把 11 种逐个折一遍，形成肌肉记忆。'
+      ],
+      chant: '见"田"就否，一排不过四；十一种型要认熟。',
+      trap: '6 个格子连通也不一定能折成（35 种六连块里只有 11 种合法），别凭感觉。',
+      demo: 'net11'
+    }
+  ];
+
+  const byId = {};
+  for (const m of METHODS) byId[m.id] = m;
+
+  /* ---------- 学习路径（按薄弱点推荐） ---------- */
+  const PATHS = [
+    {
+      id: 'p1', name: '第 1 阶段 · 建立空间直觉', days: 3,
+      goal: '把"展开图 ↔ 立方体"的对应关系变成直觉，不再是硬想。',
+      methods: ['net11', 'relative'],
+      types: ['fold', 'unfold'],
+      drill: '在 3D 实验室把 11 种展开图逐个折叠 / 拆解 3 遍；再刷 20 道折纸盒入门题。'
+    },
+    {
+      id: 'p2', name: '第 2 阶段 · 掌握核心三板斧', days: 5,
+      goal: '相对面排除 + 箭头法 + 公共边法，能稳定拿下 80% 的六面体题。',
+      methods: ['arrow', 'arrow2', 'publicEdge'],
+      types: ['fold', 'unfold'],
+      drill: '每天 20 题，限时 40 秒/题；错题必须写出"用的是哪个方法、卡在哪一步"。'
+    },
+    {
+      id: 'p3', name: '第 3 阶段 · 攻克高频变形', days: 4,
+      goal: '公共点、时针法、双面箭头，解决近年越来越难的六面体题。',
+      methods: ['clock', 'publicPoint', 'rubber'],
+      types: ['fold', 'unfold'],
+      drill: '只刷"进阶"难度，重点练三个面交于一点的题型。'
+    },
+    {
+      id: 'p4', name: '第 4 阶段 · 三视图与截面', days: 4,
+      goal: '从"会做六面体"扩展到"立体题全覆盖"。',
+      methods: ['view', 'occlusion', 'section', 'onecut'],
+      types: ['view3', 'section'],
+      drill: '三视图练"压扁投影"，截面题背熟基础体截面速查表。'
+    },
+    {
+      id: 'p5', name: '第 5 阶段 · 堆积、拼合与旋转', days: 4,
+      goal: '拿下近年的命题新趋势：小方块拼合、空间旋转。',
+      methods: ['stack', 'count', 'concave', 'rotate', 'feature'],
+      types: ['stack', 'rotate'],
+      drill: '先数块、再分层、最后盯特征块，形成固定动作序列。'
+    },
+    {
+      id: 'p6', name: '第 6 阶段 · 提速与稳定', days: 5,
+      goal: '把正确率稳定在 90% 以上，并把单题耗时压到 40 秒内。',
+      methods: METHODS.map((m) => m.id),
+      types: ['fold', 'unfold', 'view3', 'section', 'stack', 'rotate'],
+      drill: '每日 30 题限时模考；只复盘错题本中的"薄弱知识点"，不要重复刷已掌握的。'
+    }
+  ];
+
+  /* ---------- 常见易错点清单（错题归因用） ---------- */
+  const PITFALLS = [
+    { id: 'opp', cn: '把相对面误判为相邻面（或反之）', methods: ['relative', 'net11'] },
+    { id: 'dir', cn: '图案自身方向搞反（三角形/箭头朝向）', methods: ['arrow', 'clock'] },
+    { id: 'edge', cn: '公共边两侧的位置关系看错', methods: ['publicEdge', 'publicPoint'] },
+    { id: 'sym', cn: '在中心对称的面上强行定方向', methods: ['arrow2'] },
+    { id: 'view3d', cn: '把有立体感的图当成视图', methods: ['view'] },
+    { id: 'hide', cn: '把被遮挡的部分画了出来', methods: ['view', 'occlusion'] },
+    { id: 'curve', cn: '截面里出现曲线（多面体不可能）', methods: ['section', 'onecut'] },
+    { id: 'split', cn: '认为一刀能切出分离的两块', methods: ['section'] },
+    { id: 'count', cn: '漏数被上层遮住的方块', methods: ['count', 'stack'] },
+    { id: 'mirror', cn: '把镜像当成旋转', methods: ['rotate', 'feature'] }
+  ];
+
+  const API = { METHODS, byId, PATHS, PITFALLS };
+  if (typeof module !== 'undefined' && module.exports) module.exports = API;
+  root.Methods = API;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+;
+;
+/* ===== store.js ===== */
+/* ============================================================
+ *  store.js  ——  答题记录 / 错题本 / 学情诊断 / 持久化
+ *  纯 localStorage，无后端依赖；支持导入导出。
+ * ========================================================== */
+(function (root) {
+  'use strict';
+  const QS = root.Questions || {};
+  const MT = root.Methods || {};
+
+  const KEY = 'sg3d.store.v1';
+  const DEFAULTS = {
+    version: 1,
+    records: [],        // {id, type, diff, ok, ms, ts, chosen, answer}
+    wrong: [],          // 错题本 {qid, type, diff, n, ok, last, box, mastered, tag}
+    marks: [],          // 收藏
+    notes: [],          // 用户笔记 {qid, text, ts}
+    custom: [],         // 外部录入 / 导入的题目
+    sources: [],        // 订阅的题库源 {url, name, enabled, lastSync, count}
+    methods: {},        // 技巧学习进度 {id: {read, star, drill}}
+    plan: null,         // 当前学习计划
+    settings: {
+      dailyGoal: 20,
+      autoNext: true,
+      showTimer: true,
+      reviewLimit: 20,
+      lastSync: null,
+      autoSync: true
+    },
+    days: {}            // 每日统计 {'2026-09-15': {n, ok, ms}}
+  };
+
+  let S = null;
+
+  function load() {
+    if (S) return S;
+    try {
+      const raw = localStorage.getItem(KEY);
+      S = raw ? Object.assign({}, DEFAULTS, JSON.parse(raw)) : JSON.parse(JSON.stringify(DEFAULTS));
+      S.settings = Object.assign({}, DEFAULTS.settings, S.settings || {});
+    } catch (e) {
+      S = JSON.parse(JSON.stringify(DEFAULTS));
+    }
+    return S;
+  }
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(load())); } catch (e) { }
+  }
+  function reset() { S = JSON.parse(JSON.stringify(DEFAULTS)); save(); }
+
+  const today = () => new Date().toISOString().slice(0, 10);
+
+  /* ---------- 记录一次作答 ---------- */
+  function record(q, chosen, ms) {
+    const s = load();
+    const ok = chosen === q.answer;
+    const rec = {
+      id: q.id, type: q.type, diff: q.diff, ok, ms: Math.max(0, ms | 0),
+      chosen, answer: q.answer, ts: Date.now(), methods: q.methods || [], tags: q.tags || []
+    };
+    s.records.push(rec);
+    if (s.records.length > 4000) s.records = s.records.slice(-4000);
+
+    // 每日统计
+    const d = today();
+    s.days[d] = s.days[d] || { n: 0, ok: 0, ms: 0 };
+    s.days[d].n++; s.days[d].ok += ok ? 1 : 0; s.days[d].ms += rec.ms;
+
+    // 错题本（艾宾浩斯间隔：1/2/4/7/15/30 天）
+    const box = [1, 2, 4, 7, 15, 30];
+    let w = s.wrong.find((x) => x.qid === q.id);
+    if (!ok) {
+      if (!w) {
+        w = { qid: q.id, type: q.type, diff: q.diff, n: 0, ok: 0, last: 0, box: 0, mastered: false, methods: q.methods || [] };
+        s.wrong.push(w);
+      }
+      w.n++; w.box = 0; w.last = Date.now(); w.mastered = false;
+      w.next = Date.now() + box[0] * 86400000;
+    } else if (w) {
+      w.ok++; w.box = Math.min(box.length - 1, w.box + 1);
+      w.next = Date.now() + box[w.box] * 86400000;
+      if (w.box >= 3) w.mastered = true;
+    }
+    save();
+    return { ok, rec, wrong: w };
+  }
+
+  function isMarked(qid) { return load().marks.includes(qid); }
+  function toggleMark(qid) {
+    const s = load();
+    const i = s.marks.indexOf(qid);
+    if (i >= 0) s.marks.splice(i, 1); else s.marks.push(qid);
+    save(); return i < 0;
+  }
+  function saveNote(qid, text) {
+    const s = load();
+    const n = s.notes.find((x) => x.qid === qid);
+    if (n) n.text = text; else s.notes.push({ qid, text, ts: Date.now() });
+    save();
+  }
+  const getNote = (qid) => (load().notes.find((x) => x.qid === qid) || {}).text || '';
+
+  /* ---------- 统计 ---------- */
+  function statBy(list, keyFn) {
+    const m = {};
+    for (const r of list) {
+      const k = keyFn(r);
+      m[k] = m[k] || { n: 0, ok: 0, ms: 0 };
+      m[k].n++; m[k].ok += r.ok ? 1 : 0; m[k].ms += r.ms;
+    }
+    for (const k in m) {
+      m[k].rate = m[k].n ? m[k].ok / m[k].n : 0;
+      m[k].avg = m[k].n ? m[k].ms / m[k].n : 0;
+    }
+    return m;
+  }
+
+  function overview(days) {
+    const s = load();
+    const since = Date.now() - (days || 30) * 86400000;
+    const list = s.records.filter((r) => r.ts >= since);
+    const byType = statBy(list, (r) => r.type);
+    const byDiff = statBy(list, (r) => r.diff);
+    const byMethod = {};
+    for (const r of list) {
+      for (const m of (r.methods || [])) {
+        byMethod[m] = byMethod[m] || { n: 0, ok: 0, ms: 0 };
+        byMethod[m].n++; byMethod[m].ok += r.ok ? 1 : 0; byMethod[m].ms += r.ms;
+      }
+    }
+    for (const k in byMethod) { byMethod[k].rate = byMethod[k].ok / byMethod[k].n; byMethod[k].avg = byMethod[k].ms / byMethod[k].n; }
+    const total = list.length;
+    const ok = list.filter((r) => r.ok).length;
+    return {
+      total, ok, rate: total ? ok / total : 0,
+      avg: total ? list.reduce((a, r) => a + r.ms, 0) / total : 0,
+      byType, byDiff, byMethod,
+      streak: streak(), today: s.days[today()] || { n: 0, ok: 0, ms: 0 }
+    };
+  }
+
+  function streak() {
+    const s = load();
+    let n = 0;
+    const d = new Date();
+    for (let i = 0; i < 400; i++) {
+      const k = new Date(d.getTime() - i * 86400000).toISOString().slice(0, 10);
+      if (s.days[k] && s.days[k].n > 0) n++;
+      else if (i > 0) break;
+    }
+    return n;
+  }
+
+  /** 近 N 天趋势 */
+  function trend(days) {
+    const s = load(); const out = [];
+    for (let i = (days || 14) - 1; i >= 0; i--) {
+      const k = new Date(Date.now() - i * 86400000).toISOString().slice(0, 10);
+      const d = s.days[k] || { n: 0, ok: 0 };
+      out.push({ date: k.slice(5), n: d.n, rate: d.n ? d.ok / d.n : null });
+    }
+    return out;
+  }
+
+  /* ---------- 薄弱点诊断 ---------- */
+  function diagnose() {
+    const s = load();
+    const ov = overview(30);
+    const weakTypes = [];
+    const TYPE_CN = QS.TYPE_INFO || {};
+    for (const t of Object.keys(TYPE_CN)) {
+      const st = ov.byType[t];
+      if (!st || st.n < 4) continue;
+      if (st.rate < 0.66) weakTypes.push({ type: t, cn: TYPE_CN[t].cn, rate: st.rate, n: st.n, avg: st.avg });
+    }
+    weakTypes.sort((a, b) => a.rate - b.rate);
+
+    // 方法维度薄弱（样本 >=3）
+    const weakMethods = [];
+    for (const m of MT.METHODS || []) {
+      const st = ov.byMethod[m.id];
+      if (!st || st.n < 3) continue;
+      if (st.rate < 0.66) weakMethods.push({ id: m.id, cn: m.name, rate: st.rate, n: st.n });
+    }
+    weakMethods.sort((a, b) => a.rate - b.rate);
+
+    // 未掌握错题数
+    const pending = s.wrong.filter((w) => !w.mastered);
+    const due = pending.filter((w) => !w.next || w.next <= Date.now());
+
+    // 推荐阶段：取第一个"其覆盖题型命中薄弱"的阶段
+    const paths = MT.PATHS || [];
+    let recommend = paths[0];
+    if (weakTypes.length) {
+      const tset = new Set(weakTypes.map((w) => w.type));
+      const hit = paths.find((p) => p.types.some((t) => tset.has(t)));
+      if (hit) recommend = hit;
+    } else if (ov.total > 30) {
+      recommend = paths[paths.length - 1];
+    }
+
+    // 生成建议
+    const advice = [];
+    if (!ov.total) {
+      advice.push('还没有答题记录，先做一组「摸底测」（12 题，覆盖全部题型），系统才能算出你的薄弱点。');
+    } else {
+      if (weakTypes.length) {
+        advice.push(`最薄弱的题型是**${weakTypes.slice(0, 2).map((w) => w.cn).join('、')}**（正确率 ${(weakTypes[0].rate * 100).toFixed(0)}%），建议立刻进入「${recommend.name}」。`);
+      } else if (ov.total >= 50 && ov.rate >= 0.66) {
+        advice.push('各题型正确率都在 66% 以上，基础扎实；下一步主攻**提速**（目标：单题 40 秒内）。');
+      } else {
+        advice.push('目前样本较少或正确率还在波动，先按推荐方案刷题，累计 50 题以上再看结论。');
+      }
+      if (ov.avg > 60000) advice.push(`平均每题 ${(ov.avg / 1000).toFixed(0)} 秒，偏慢。原因通常是"靠硬想"——请强制自己每题先用相对面排除，再用箭头法。`);
+      else if (ov.avg > 45000) advice.push(`平均每题 ${(ov.avg / 1000).toFixed(1)} 秒，接近达标，继续用固定动作序列压缩到 40 秒内。`);
+      if (due.length) advice.push(`错题本中有 ${due.length} 道题到了复习时间，先清掉它们（复习比刷新题更划算）。`);
+      if (weakMethods.length) advice.push(`方法层面，${weakMethods.slice(0, 2).map((w) => w.cn).join('、')}对应的题错得多，去「技巧库」把这两张卡重新过一遍。`);
+      if (ov.total < 30) advice.push('样本还太少，诊断结果会漂移，建议累计 50 题以上再看结论。');
+    }
+    return { ov, weakTypes, weakMethods, pending: pending.length, due: due.length, recommend, advice };
+  }
+
+  /** 生成今日任务 */
+  function todayPlan() {
+    const s = load();
+    const d = diagnose();
+    const goal = s.settings.dailyGoal || 20;
+    const done = (s.days[today()] || { n: 0 }).n;
+    const due = s.wrong.filter((w) => !w.mastered && (!w.next || w.next <= Date.now()));
+    return {
+      goal, done, remain: Math.max(0, goal - done),
+      review: due.slice(0, s.settings.reviewLimit || 20).map((w) => w.qid),
+      focus: d.weakTypes.length ? d.weakTypes[0].type : null,
+      focusCn: d.weakTypes.length ? d.weakTypes[0].cn : '综合',
+      path: d.recommend
+    };
+  }
+
+  /** 待复习错题（按到期时间排序） */
+  function reviewQueue(limit) {
+    const s = load();
+    const now = Date.now();
+    return s.wrong.filter((w) => !w.mastered)
+      .sort((a, b) => (a.next || 0) - (b.next || 0))
+      .slice(0, limit || 20);
+  }
+  function wrongList() {
+    return load().wrong.slice().sort((a, b) => b.last - a.last);
+  }
+
+  /* ---------- 自定义题库 / 订阅源 ---------- */
+  function addCustom(list, sourceName) {
+    const s = load();
+    let added = 0;
+    for (const q of list) {
+      if (!q || !q.options || q.options.length < 2) continue;
+      const id = q.id || ('custom-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7));
+      if (s.custom.some((x) => x.id === id)) continue;
+      s.custom.push(Object.assign({}, q, {
+        id, source: sourceName || q.source || '导入',
+        type: q.type || 'custom', typeCn: q.typeCn || (QS.TYPE_INFO && QS.TYPE_INFO[q.type] ? QS.TYPE_INFO[q.type].cn : '自定义'),
+        diff: q.diff || 'normal', methods: q.methods || [], tags: q.tags || [],
+        importedAt: Date.now()
+      }));
+      added++;
+    }
+    save();
+    return added;
+  }
+  function customByType(t) {
+    return load().custom.filter((q) => !t || q.type === t);
+  }
+  function addSource(url, name) {
+    const s = load();
+    if (s.sources.some((x) => x.url === url)) return false;
+    s.sources.push({ url, name: name || url, enabled: true, lastSync: null, count: 0 });
+    save(); return true;
+  }
+  function removeSource(url) {
+    const s = load(); s.sources = s.sources.filter((x) => x.url !== url); save();
+  }
+  function markSource(url, n) {
+    const s = load();
+    const x = s.sources.find((y) => y.url === url);
+    if (x) { x.lastSync = Date.now(); x.count = (x.count || 0) + (n || 0); }
+    s.settings.lastSync = Date.now();
+    save();
+  }
+
+  function exportAll() { return JSON.stringify(load(), null, 2); }
+  function importAll(json) {
+    const o = JSON.parse(json);
+    S = Object.assign({}, DEFAULTS, o); save(); return true;
+  }
+
+  const API = {
+    load, save, reset, record, toggleMark, isMarked, saveNote, getNote,
+    overview, trend, diagnose, todayPlan, reviewQueue, wrongList, streak,
+    addCustom, customByType, addSource, removeSource, markSource, exportAll, importAll, today
+  };
+  root.Store = API;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+;
+;
+/* ===== lab.js ===== */
+/* ============================================================
+ *  lab.js  ——  3D 实验室（空间感训练）
+ *  ① 折叠实验室：11 种展开图 -> 折叠动画 -> 自由旋转
+ *  ② 拆解实验室：立方体 -> 展开动画
+ *  ③ 堆叠实验室：自定义搭建立体，实时看三视图与总数
+ *  ④ 截面实验室：拖动切平面，实时看截面形状
+ * ========================================================== */
+(function (root) {
+  'use strict';
+  const C3 = root.Core3D, CN = root.CubeNet, PT = root.Patterns, RD = root.Render, QS = root.Questions;
+  const { V, Camera } = C3;
+
+  const ease = (t) => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+
+  /* ---------------- 折叠 / 拆解实验室 ---------------- */
+  function initFold(host, opt = {}) {
+    const wrap = document.createElement('div');
+    wrap.innerHTML = `
+      <div class="lab-stage">
+        <canvas></canvas>
+        <div class="lab-tip">拖动旋转 · 滚轮缩放</div>
+      </div>
+      <div class="slider-row">
+        <label>折叠进度</label>
+        <input type="range" id="fT" min="0" max="100" value="0">
+        <span class="val" id="fTv">0%</span>
+      </div>
+      <div class="btn-row">
+        <button class="btn ghost sm" id="fPlay">▶ 播放折叠</button>
+        <button class="btn ghost sm" id="fBack">◀ 播放拆解</button>
+        <button class="btn line sm" id="fPat">换图案</button>
+        <button class="btn line sm" id="fReset">复位视角</button>
+      </div>
+      <div class="sec-title">展开图形态（立方体共有 11 种）</div>
+      <div class="net-grid" id="fNets"></div>`;
+    host.appendChild(wrap);
+
+    const canvas = wrap.querySelector('canvas');
+    const scene = new RD.Scene(canvas, { cam: { yaw: -Math.PI * 0.75, pitch: 0.62 } });
+    const slider = wrap.querySelector('#fT');
+    const tv = wrap.querySelector('#fTv');
+
+    const layouts = CN.CLASSIC_LAYOUTS;
+    let netKey = opt.netKey || 'net7';
+    let net = CN.buildNetFromLayout(JSON.parse(JSON.stringify(layouts[netKey].cells)));
+    let patterns = randomPatterns();
+    let t = 0, raf = null, playing = false;
+
+    function randomPatterns() {
+      const rng = QS.mulberry32(Date.now() & 0xffff);
+      const dir = QS.mulberry32(Date.now() & 0xffff);
+      const ids = PT.DIRECTIONAL.filter((x) => x !== 'blank');
+      const sym = PT.IDS.filter((x) => PT.P[x].symmetric && x !== 'blank');
+      const arr = [];
+      for (let i = 0; i < 4; i++) arr.push(ids[Math.floor(rng() * ids.length)]);
+      for (let i = 0; i < 2; i++) arr.push(sym[Math.floor(dir() * sym.length)]);
+      // 去重
+      const out = {};
+      const keys = CN.FACE_KEYS;
+      keys.forEach((k, i) => { out[k] = arr[i % arr.length]; });
+      const used = new Set();
+      for (const k of keys) {
+        if (used.has(out[k])) { const rest = PT.IDS.filter((p) => !used.has(p) && p !== 'blank'); out[k] = rest[Math.floor(rng() * rest.length)] || 'circle'; }
+        used.add(out[k]);
+      }
+      return out;
+    }
+
+    function offsetAt(tt) {
+      const f0 = CN.buildFaces(net, 0, patterns, 1);
+      const c0 = f0.reduce((a, f) => V.add(a, f.center), [0, 0, 0]).map((x) => -x / f0.length);
+      const off1 = CN.cubeCenterOffset(net, 1);
+      return V.add(V.mul(c0, 1 - tt), V.mul(off1, tt));
+    }
+
+    function render() {
+      scene.offset = offsetAt(ease(t));
+      const faces = CN.buildFaces(net, ease(t), patterns, 1);
+      scene.setFaces(faces);
+      scene.fit(0.8);
+      scene.draw();
+      slider.value = Math.round(t * 100);
+      tv.textContent = Math.round(t * 100) + '%';
+    }
+    function setT(v) { t = Math.max(0, Math.min(1, v)); render(); }
+
+    function play(to) {
+      if (playing) return;
+      playing = true;
+      const from = t, dur = 1100, t0 = performance.now();
+      const step = (now) => {
+        const k = Math.min(1, (now - t0) / dur);
+        setT(from + (to - from) * k);
+        if (k < 1) raf = requestAnimationFrame(step);
+        else { playing = false; }
+      };
+      raf = requestAnimationFrame(step);
+    }
+
+    slider.addEventListener('input', () => { if (!playing) setT(slider.value / 100); });
+    wrap.querySelector('#fPlay').onclick = () => play(1);
+    wrap.querySelector('#fBack').onclick = () => play(0);
+    wrap.querySelector('#fPat').onclick = () => { patterns = randomPatterns(); render(); renderNets(); };
+    wrap.querySelector('#fReset').onclick = () => { scene.cam = new Camera({ yaw: -Math.PI * 0.75, pitch: 0.62 }); scene._size = 0; render(); };
+
+    // 展开图选择
+    const netBox = wrap.querySelector('#fNets');
+    function renderNets() {
+      netBox.innerHTML = '';
+      for (const k of Object.keys(layouts)) {
+        const n = CN.buildNetFromLayout(JSON.parse(JSON.stringify(layouts[k].cells)));
+        const b = document.createElement('button');
+        b.className = 'net-item' + (k === netKey ? ' on' : '');
+        b.innerHTML = RD.netToSVG(n, patterns, { cell: 15 }) + `<span>${layouts[k].type}</span>`;
+        b.onclick = () => {
+          netKey = k;
+          net = CN.buildNetFromLayout(JSON.parse(JSON.stringify(layouts[k].cells)));
+          setT(0); renderNets();
+        };
+        netBox.appendChild(b);
+      }
+    }
+    renderNets();
+    requestAnimationFrame(() => { scene.resize(); render(); });
+
+    return {
+      destroy() { if (raf) cancelAnimationFrame(raf); },
+      resize() { scene.resize(); render(); }
+    };
+  }
+
+  /* ---------------- 堆叠 / 三视图 / 截面实验室 ---------------- */
+  const PLANE_PRESETS = [
+    { id: 'h', cn: '水平切', n: [0, 0, 1] },
+    { id: 'v', cn: '前后切', n: [0, 1, 0] },
+    { id: 's', cn: '左右切', n: [1, 0, 0] },
+    { id: 'd1', cn: '斜切 45°', n: [1, 0, 1] },
+    { id: 'd2', cn: '斜切 −45°', n: [1, 0, -1] },
+    { id: 'd3', cn: '斜切(对角)', n: [1, 1, 0] },
+    { id: 'd4', cn: '斜切(反向)', n: [1, -1, 0] },
+    { id: 't', cn: '三向斜切', n: [1, 1, 1] }
+  ];
+
+  function initStack(host) {
+    const wrap = document.createElement('div');
+    wrap.innerHTML = `
+      <div class="lab-stage">
+        <canvas></canvas>
+        <div class="lab-tip">拖动旋转 · 滚轮缩放</div>
+      </div>
+      <div class="seg">
+        <button class="on" data-m="stack">搭建立体</button>
+        <button data-m="view">三视图</button>
+        <button data-m="cut">截面</button>
+      </div>
+      <div id="sStack">
+        <div class="sec-title">俯视格（点一下 +1 层，到 4 回到 0）</div>
+        <div class="vox-pick" id="sGrid"></div>
+        <div class="btn-row" style="margin-top:12px">
+          <button class="btn ghost sm" id="sRand">🎲 随机</button>
+          <button class="btn line sm" id="sClear">清空</button>
+          <button class="btn line sm" id="sDemo">示例</button>
+        </div>
+      </div>
+      <div id="sView" hidden>
+        <div class="card tight">
+          <div class="card-title"><h3>三视图</h3><span class="hint" id="vTotal"></span></div>
+          <div class="grid3" id="vBox"></div>
+        </div>
+      </div>
+      <div id="sCut" hidden>
+        <div class="card tight">
+          <div class="card-title"><h3>截面（一刀切）</h3></div>
+          <div class="plane-btns" id="cPlanes"></div>
+          <div class="slider-row">
+            <label>切面位置</label>
+            <input type="range" id="cPos" min="-30" max="30" value="0">
+            <span class="val" id="cPosV">0.0</span>
+          </div>
+          <div style="text-align:center;margin-top:8px" id="cOut"></div>
+          <p class="hint" id="cNote"></p>
+        </div>
+      </div>`;
+    host.appendChild(wrap);
+
+    const canvas = wrap.querySelector('canvas');
+    const scene = new RD.Scene(canvas, { cam: { yaw: -Math.PI * 0.75, pitch: 0.62 } });
+    const N = 3, MAXH = 4;
+    let H = [];   // H[y*3+x] = 高度
+    for (let i = 0; i < N * N; i++) H.push(0);
+    let planeIdx = 0, planePos = 0;
+
+    const cellsOf = () => {
+      const out = [];
+      for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) for (let z = 0; z < H[y * N + x]; z++) out.push([x, y, z]);
+      return out;
+    };
+
+    function render() {
+      const cells = cellsOf();
+      const faces = RD.voxelFaces(cells, { color: '#fffafb' });
+      scene.offset = [0, 0, 0];
+      scene.setFaces(faces.length ? faces : RD.voxelFaces([[0, 0, 0]]));
+      scene._size = 0;
+      scene.fit(0.78);
+      scene.draw();
+      renderGrid();
+      renderViews(cells);
+      renderCut(cells);
+    }
+
+    const gridBox = wrap.querySelector('#sGrid');
+    function renderGrid() {
+      gridBox.innerHTML = '';
+      for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
+        const b = document.createElement('button');
+        b.textContent = H[y * N + x] || '·';
+        b.className = H[y * N + x] ? 'on' : '';
+        b.onclick = () => { H[y * N + x] = (H[y * N + x] + 1) % (MAXH + 1); render(); };
+        gridBox.appendChild(b);
+      }
+    }
+    const vBox = wrap.querySelector('#vBox');
+    const vTotal = wrap.querySelector('#vTotal');
+    function renderViews(cells) {
+      vTotal.textContent = '共 ' + cells.length + ' 块';
+      if (!cells.length) { vBox.innerHTML = '<p class="hint">先搭建一个立体</p>'; return; }
+      vBox.innerHTML = ['front', 'top', 'left'].map((v) =>
+        `<div style="text-align:center"><div style="font-size:11.5px;color:var(--ink-3);margin-bottom:4px">${RD.VIEW_CN[v]}</div>${RD.viewCellsSVG(cells, v, { cell: 20 })}</div>`
+      ).join('');
+    }
+
+    const cOut = wrap.querySelector('#cOut'), cNote = wrap.querySelector('#cNote');
+    function renderCut(cells) {
+      if (!cells.length) { cOut.innerHTML = '<p class="hint">先搭建一个立体</p>'; cNote.textContent = ''; return; }
+      const pl = PLANE_PRESETS[planeIdx];
+      const n = V.norm(pl.n);
+      const cen = cells.reduce((a, c) => [a[0] + c[0] + .5, a[1] + c[1] + .5, a[2] + c[2] + .5], [0, 0, 0]).map((x) => x / cells.length);
+      const p = V.add(cen, V.mul(n, planePos / 10));
+      const sec = RD.sectionOf(cells, { p, n }, { step: 0.055 });
+      const r = RD.sectionToSVG(sec, { scale: 30 });
+      cOut.innerHTML = r.svg || '<p class="hint">该位置切不到立体，拖动"切面位置"</p>';
+      cNote.innerHTML = r.svg
+        ? `切法：<b>${pl.cn}</b>，截面为 <b>${r.comps}</b> 个连通块，面积约 ${r.area.toFixed(2)}。记住：一刀只能切出<b>一个连通的</b>形状，且一定是直线多边形。`
+        : '';
+    }
+    const cPlanes = wrap.querySelector('#cPlanes');
+    PLANE_PRESETS.forEach((p, i) => {
+      const b = document.createElement('button');
+      b.className = 'btn line sm' + (i === 0 ? ' ghost' : '');
+      b.textContent = p.cn;
+      b.onclick = () => {
+        planeIdx = i; planePos = 0;
+        wrap.querySelector('#cPos').value = 0; wrap.querySelector('#cPosV').textContent = '0.0';
+        Array.from(cPlanes.children).forEach((x, j) => { x.className = 'btn line sm' + (j === i ? ' ghost' : ''); });
+        render();
+      };
+      cPlanes.appendChild(b);
+    });
+    wrap.querySelector('#cPos').addEventListener('input', (e) => {
+      planePos = +e.target.value / 10;
+      wrap.querySelector('#cPosV').textContent = planePos.toFixed(1);
+      renderCut(cellsOf());
+    });
+
+    wrap.querySelector('#sRand').onclick = () => {
+      const cells = QS.genVoxels(QS.mulberry32((Math.random() * 1e9) | 0), { nx: 3, ny: 3, maxZ: 3, max: 12 });
+      H = new Array(9).fill(0);
+      for (const [x, y, z] of cells) if (x < 3 && y < 3 && z < 4) H[y * N + x] = Math.max(H[y * N + x], z + 1);
+      render();
+    };
+    wrap.querySelector('#sClear').onclick = () => { H = new Array(9).fill(0); render(); };
+    wrap.querySelector('#sDemo').onclick = () => { H = [1, 2, 1, 2, 3, 2, 1, 2, 1]; render(); };
+
+    // 模式切换
+    wrap.querySelectorAll('.seg button').forEach((b) => {
+      b.onclick = () => {
+        wrap.querySelectorAll('.seg button').forEach((x) => x.classList.remove('on'));
+        b.classList.add('on');
+        const m = b.dataset.m;
+        wrap.querySelector('#sStack').hidden = m !== 'stack';
+        wrap.querySelector('#sView').hidden = m !== 'view';
+        wrap.querySelector('#sCut').hidden = m !== 'cut';
+      };
+    });
+
+    H = [1, 2, 1, 2, 3, 2, 1, 2, 1];
+    requestAnimationFrame(() => { scene.resize(); render(); });
+    return { destroy() { }, resize() { scene.resize(); render(); } };
+  }
+
+  root.Lab = { initFold, initStack };
+})(typeof window !== 'undefined' ? window : globalThis);
+
+;
+;
+/* ===== app.js ===== */
+/* ============================================================
+ *  app.js  ——  主界面与业务流程
+ * ========================================================== */
+(function () {
+  'use strict';
+  const QS = window.Questions, MT = window.Methods, ST = window.Store, RD = window.Render, CN = window.CubeNet;
+  const $ = (s, r) => (r || document).querySelector(s);
+  const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+  const TYPES = Object.keys(QS.TYPE_INFO);
+  const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+  let cur = 'practice';
+  let labCtrl = null;
+
+  /* ---------------- 工具 ---------------- */
+  function toast(msg) {
+    const t = $('#toast');
+    t.textContent = msg; t.hidden = false;
+    clearTimeout(t._h); t._h = setTimeout(() => { t.hidden = true; }, 1900);
+  }
+  function modal(title, html, onOpen) {
+    $('#modalTitle').textContent = title;
+    $('#modalBody').innerHTML = html;
+    $('#modal').hidden = false;
+    if (onOpen) onOpen($('#modalBody'));
+  }
+  function closeModal() { $('#modal').hidden = true; }
+  function fmtTime(ms) {
+    const s = Math.round(ms / 1000);
+    return s < 60 ? s + '秒' : Math.floor(s / 60) + '分' + (s % 60) + '秒';
+  }
+  const pct = (x) => (x * 100).toFixed(0) + '%';
+
+  /* ---------------- 页面：练习 ---------------- */
+  function pagePractice() {
+    const d = ST.diagnose(), ov = d.ov, tp = ST.todayPlan();
+    const goal = tp.goal, done = Math.min(tp.done, goal);
+    const C = 2 * Math.PI * 24;
+    const h = [];
+    h.push(`<div class="hero anim">
+      <h2>今日任务</h2>
+      <p>主攻：${esc(tp.focusCn)} · 计划「${esc(tp.path.name)}」</p>
+      <div class="ring-wrap">
+        <svg class="ring" viewBox="0 0 56 56">
+          <circle class="bg" cx="28" cy="28" r="24"/>
+          <circle class="fg" cx="28" cy="28" r="24" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${(C * (1 - (goal ? done / goal : 0))).toFixed(1)}" transform="rotate(-90 28 28)"/>
+          <text class="ring-num" x="28" y="31" text-anchor="middle">${done}/${goal}</text>
+        </svg>
+        <div class="txt"><b>${done >= goal ? '今日目标已完成 🎉' : '还差 ' + (goal - done) + ' 题'}</b>
+        <span>累计 ${ov.total} 题 · 正确率 ${pct(ov.rate)} · 连续 ${ST.streak()} 天</span></div>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><b>${tp.review}</b><span>待复习错题</span></div>
+        <div class="hero-stat"><b>${d.pending}</b><span>未掌握</span></div>
+        <div class="hero-stat"><b>${ov.avg ? (ov.avg / 1000).toFixed(1) + 's' : '—'}</b><span>平均用时</span></div>
+      </div>
+    </div>`);
+
+    h.push(`<div class="sec-title">选择模式</div>
+    <div class="grid2">
+      <button class="btn block" data-act="quick">⚡ 快速练习 <span style="font-size:11px;opacity:.85">20 题混合</span></button>
+      <button class="btn ghost block" data-act="assess">🎯 摸底测 <span style="font-size:11px;opacity:.85">12 题定薄弱</span></button>
+      <button class="btn ghost block" data-act="daily">📅 每日一练 <span style="font-size:11px;opacity:.85">今天的 30 题</span></button>
+      <button class="btn ghost block" data-act="review">🔁 错题复习 <span style="font-size:11px;opacity:.85">${tp.review} 题到期</span></button>
+    </div>`);
+
+    h.push(`<div class="sec-title">专项突破（数字为近 30 天正确率）</div><div class="grid2">`);
+    for (const t of TYPES) {
+      const info = QS.TYPE_INFO[t], s = ov.byType[t];
+      const r = s ? s.rate : null;
+      const n = s ? s.n : 0;
+      h.push(`<button class="type-card" data-act="type" data-t="${t}">
+        <div class="ico">${info.icon}</div>
+        <b>${info.cn}</b><div class="d">${info.desc}</div>
+        <div class="rate"><i style="width:${r == null ? 0 : Math.round(r * 100)}%"></i></div>
+        <div class="rate-n">${r == null ? '暂无数据' : pct(r) + ' · ' + n + ' 题'}</div>
+      </button>`);
+    }
+    h.push('</div>');
+
+    if (d.advice && d.advice.length) {
+      h.push(`<div class="sec-title">给你的建议</div><div class="card"><div class="hint" style="font-size:13px;line-height:1.8">${
+        d.advice.map((a) => '• ' + a.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')).join('<br>')}</div></div>`);
+    }
+    return h.join('');
+  }
+
+  /* ---------------- 页面：实验室 ---------------- */
+  function pageLab() {
+    return `<div class="seg" id="labSeg">
+        <button class="on" data-l="fold">📦 折叠 / 拆解</button>
+        <button data-l="stack">🧱 堆叠 / 三视图 / 截面</button>
+      </div>
+      <div id="labHost"></div>`;
+  }
+  function mountLab(kind) {
+    const host = $('#labHost');
+    if (!host) return;
+    if (labCtrl && labCtrl.destroy) labCtrl.destroy();
+    host.innerHTML = '';
+    labCtrl = kind === 'fold' ? window.Lab.initFold(host) : window.Lab.initStack(host);
+  }
+
+  /* ---------------- 页面：技巧 ---------------- */
+  function pageMethods() {
+    const h = [];
+    const s = ST.load();
+    const read = s.methods || {};
+    h.push(`<div class="card tight"><div class="hint">只收录<b>通用、高效、有明确判据</b>的方法。每条都标注了「什么时候用」和「最容易错在哪」。建议按顺序学，学完立刻去做对应题型。</div></div>`);
+    const seen = new Set();
+    for (const p of MT.PATHS) {
+      h.push(`<div class="sec-title">${esc(p.name)} <span style="font-weight:400">· 约 ${p.days} 天</span></div>`);
+      h.push(`<div class="card tight" style="background:var(--pink-50)"><div class="hint" style="color:var(--ink-2)"><b>目标：</b>${esc(p.goal)}<br><b>训练：</b>${esc(p.drill)}</div>
+        <div class="btn-row" style="margin-top:10px"><button class="btn sm" data-act="pathdrill" data-p="${p.id}">开始这组训练</button></div></div>`);
+      for (const mid of p.methods) {
+        if (seen.has(mid)) continue;
+        seen.add(mid);
+        const m = MT.byId[mid];
+        if (!m) continue;
+        const done = read[mid] && read[mid].read;
+        h.push(`<div class="m-card" data-m="${m.id}">
+          <div class="m-head"><div class="lv">${m.level}</div>
+            <div class="t"><b>${esc(m.name)} ${done ? '<span style="color:var(--ok);font-size:11px">已学</span>' : ''}</b>
+            <span>${m.types.map((t) => (QS.TYPE_INFO[t] || {}).cn || t).join(' · ')}</span></div>
+            <div class="ar">›</div></div>
+          <div class="m-body" hidden>
+            <h4>什么时候用</h4><div>${esc(m.when)}</div>
+            <h4>操作步骤</h4><ol>${m.steps.map((x) => '<li>' + x.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>') + '</li>').join('')}</ol>
+            <div class="chant">${esc(m.chant)}</div>
+            <h4>最容易错在这</h4><div class="trap">${esc(m.trap)}</div>
+            <div class="btn-row" style="margin-top:10px">
+              <button class="btn sm" data-act="mdrill" data-m="${m.id}">练这个方法的题</button>
+              <button class="btn ghost sm" data-act="mdone" data-m="${m.id}">${done ? '取消已学' : '标记已学'}</button>
+            </div>
+          </div></div>`);
+      }
+    }
+    h.push(`<div class="sec-title">易错点速查</div><div class="card">`);
+    for (const p of MT.PITFALLS) {
+      h.push(`<div class="row"><div class="r-main"><b style="font-size:13.5px">${esc(p.cn)}</b>
+      <span>${p.methods.map((m) => (MT.byId[m] || {}).name || m).join(' / ')}</span></div></div>`);
+    }
+    h.push('</div>');
+    return h.join('');
+  }
+
+  /* ---------------- 页面：错题 / 学情 ---------------- */
+  function pageReview() {
+    const d = ST.diagnose(), ov = d.ov;
+    const h = [];
+    h.push(`<div class="card"><div class="card-title"><h3>学情概览</h3><span class="hint">近 30 天</span></div>
+      <div class="kpis">
+        <div class="kpi"><b>${ov.total}</b><span>总题数</span></div>
+        <div class="kpi"><b>${pct(ov.rate)}</b><span>正确率</span></div>
+        <div class="kpi"><b>${ov.avg ? (ov.avg / 1000).toFixed(1) + 's' : '—'}</b><span>平均用时</span></div>
+        <div class="kpi"><b>${ST.streak()}</b><span>连续天数</span></div>
+      </div></div>`);
+
+    h.push(radarSVG(ov));
+
+    h.push(`<div class="card"><div class="card-title"><h3>各题型掌握度</h3></div>`);
+    for (const t of TYPES) {
+      const s = ov.byType[t];
+      const r = s ? s.rate : 0, n = s ? s.n : 0;
+      h.push(`<div class="bar-row ${r < 0.66 && n >= 4 ? 'weak' : ''}">
+        <div class="n">${QS.TYPE_INFO[t].cn}</div>
+        <div class="bar"><i style="width:${Math.round(r * 100)}%"></i></div>
+        <div class="v">${n ? pct(r) : '—'}</div></div>`);
+    }
+    h.push(`<p class="hint" style="margin-top:8px">样本少于 4 题的题型不计入诊断；标红的是当前薄弱项。</p></div>`);
+
+    if (d.advice.length) {
+      h.push(`<div class="card"><div class="card-title"><h3>诊断与建议</h3></div>
+      <div class="hint" style="font-size:13.5px;line-height:1.85">${d.advice.map((a) => '• ' + a.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')).join('<br>')}</div>
+      <div class="btn-row" style="margin-top:12px"><button class="btn sm" data-act="pathdrill" data-p="${d.recommend.id}">按推荐方案练</button></div></div>`);
+    }
+
+    // 错题本
+    const wrong = ST.wrongList();
+    const pend = wrong.filter((w) => !w.mastered);
+    h.push(`<div class="sec-title">错题本（${wrong.length} 题，未掌握 ${pend.length}）</div>`);
+    if (!wrong.length) {
+      h.push(`<div class="card"><div class="empty"><div class="e-ico">🌸</div>还没有错题。做一组摸底测，系统会立刻开始记录。</div></div>`);
+    } else {
+      h.push(`<div class="btn-row" style="margin-bottom:12px">
+        <button class="btn block" data-act="review">🔁 复习到期错题（${d.due}）</button>
+        <button class="btn ghost block" data-act="reviewall">全部重做（${pend.length}）</button></div>`);
+      h.push(`<div class="card">`);
+      for (const w of wrong.slice(0, 40)) {
+        const cn = (QS.TYPE_INFO[w.type] || {}).cn || w.type;
+        const due = !w.next ? '待复习' : (w.next <= Date.now() ? '今日到期' : Math.ceil((w.next - Date.now()) / 86400000) + ' 天后');
+        h.push(`<div class="row">
+          <div class="r-main"><b>${esc(cn)} · ${esc(w.qid)}</b>
+          <span>错 ${w.n} 次 · 答对 ${w.ok} 次 · ${due}</span></div>
+          <div class="r-side">${w.mastered ? '<span class="chip g">已掌握</span>' : '<span class="chip b">未掌握</span>'}
+          <button class="btn line sm" data-act="redo" data-q="${esc(w.qid)}">重做</button></div></div>`);
+      }
+      h.push('</div>');
+    }
+    return h.join('');
+  }
+
+  function radarSVG(ov) {
+    const n = TYPES.length, cx = 150, cy = 138, R = 96;
+    const pt = (i, r) => {
+      const a = -Math.PI / 2 + i * 2 * Math.PI / n;
+      return [cx + Math.cos(a) * R * r, cy + Math.sin(a) * R * r];
+    };
+    const grid = [0.25, 0.5, 0.75, 1].map((r) => `<polygon points="${TYPES.map((_, i) => pt(i, r).map((x) => x.toFixed(1)).join(',')).join(' ')}" fill="none" stroke="#F0DDE4" stroke-width="1"/>`).join('');
+    const axes = TYPES.map((_, i) => { const p = pt(i, 1); return `<line x1="${cx}" y1="${cy}" x2="${p[0].toFixed(1)}" y2="${p[1].toFixed(1)}" stroke="#F0DDE4"/>`; }).join('');
+    const vals = TYPES.map((t) => { const s = ov.byType[t]; return s && s.n ? s.rate : 0; });
+    const poly = vals.map((v, i) => pt(i, Math.max(0.06, v)).map((x) => x.toFixed(1)).join(',')).join(' ');
+    const labels = TYPES.map((t, i) => {
+      const p = pt(i, 1.2);
+      return `<text x="${p[0].toFixed(1)}" y="${p[1].toFixed(1)}" font-size="11" fill="#A3909A" text-anchor="middle">${QS.TYPE_INFO[t].cn}</text>`;
+    }).join('');
+    const dots = vals.map((v, i) => { const p = pt(i, Math.max(0.06, v)); return `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3" fill="#E57E9C"/>`; }).join('');
+    return `<div class="card"><div class="card-title"><h3>能力雷达</h3><span class="hint">外圈=100%</span></div>
+      <svg class="chart" viewBox="0 0 300 280">${grid}${axes}
+      <polygon points="${poly}" fill="rgba(229,126,156,.22)" stroke="#E57E9C" stroke-width="2"/>${dots}${labels}</svg></div>`;
+  }
+
+  /* ---------------- 页面：我的 ---------------- */
+  function pageMe() {
+    const ov = ST.overview(30), s = ST.load();
+    const tr = ST.trend(14);
+    const h = [];
+    h.push(`<div class="card"><div class="card-title"><h3>最近 14 天</h3></div>${trendSVG(tr)}</div>`);
+
+    h.push(`<div class="sec-title">设置</div><div class="card">
+      <div class="row"><div class="r-main"><b>每日目标</b><span>当前 ${s.settings.dailyGoal} 题</span></div>
+        <div class="r-side"><input type="number" id="setGoal" value="${s.settings.dailyGoal}" min="5" max="200" style="width:64px;padding:5px 8px;border-radius:9px;border:1px solid var(--line);text-align:center"></div></div>
+      <div class="row"><div class="r-main"><b>答完自动下一题</b><span>关闭后需手动点"下一题"</span></div>
+        <div class="r-side"><div class="switch ${s.settings.autoNext ? 'on' : ''}" data-sw="autoNext"><i></i></div></div></div>
+      <div class="row"><div class="r-main"><b>显示计时</b></div>
+        <div class="r-side"><div class="switch ${s.settings.showTimer ? 'on' : ''}" data-sw="showTimer"><i></i></div></div></div>
+      <div class="row"><div class="r-main"><b>启动时自动检查题库更新</b><span class="ver" id="lastSync">上次同步：${s.settings.lastSync ? new Date(s.settings.lastSync).toLocaleString('zh-CN') : '从未'}</span></div>
+        <div class="r-side"><div class="switch ${s.settings.autoSync ? 'on' : ''}" data-sw="autoSync"><i></i></div></div></div>
+    </div>`);
+
+    h.push(`<div class="sec-title">题库更新中心</div><div class="card">
+      <div class="row"><div class="r-main"><b>内置题库</b><span class="ver">引擎版 v${BANK_VERSION} · 六大题型无限生成 · 本地自定义 ${s.custom.length} 题</span></div>
+        <div class="r-side"><button class="btn line sm" data-act="builtin">查看</button></div></div>
+      <div class="divider"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn sm" data-act="importq">＋ 录入新题</button>
+        <button class="btn ghost sm" data-act="impjson">导入 JSON 题包</button>
+        <button class="btn ghost sm" data-act="addsrc">添加订阅源</button>
+        <button class="btn ghost sm" data-act="syncnow">立即同步</button>
+      </div>
+      <div class="divider"></div>
+      <div id="srcList">${srcListHTML()}</div>
+    </div>`);
+
+    h.push(`<div class="sec-title">数据</div><div class="card">
+      <div class="row"><div class="r-main"><b>导出全部数据</b><span>记录 / 错题本 / 自定义题 / 设置</span></div>
+        <div class="r-side"><button class="btn line sm" data-act="exp">导出</button></div></div>
+      <div class="row"><div class="r-main"><b>导入备份</b><span>粘贴此前导出的 JSON</span></div>
+        <div class="r-side"><button class="btn line sm" data-act="imp">导入</button></div></div>
+      <div class="row"><div class="r-main"><b>清空所有记录</b><span style="color:var(--bad)">不可恢复</span></div>
+        <div class="r-side"><button class="btn line sm" data-act="reset">清空</button></div></div>
+    </div>`);
+
+    h.push(`<div class="card tight"><div class="hint">
+      <b>关于题目来源：</b>本软件的题目由内置几何引擎按六大考点的规律<b>程序化生成</b>，答案由模型计算得出，不声称是任何一年的考试原题，也不构成对真题的复制。想练真实真题，请用「录入新题」把题目和图形手动添加进来，或配置订阅源自动拉取。
+      <br><br><b>使用建议：</b>每天 20～30 题 + 复习到期错题，比一次性刷 100 题有效得多。
+    </div></div>`);
+    return h.join('');
+  }
+  function trendSVG(tr) {
+    const W = 300, H = 110, pad = 6;
+    const maxN = Math.max(1, ...tr.map((x) => x.n));
+    const bw = (W - pad * 2) / tr.length;
+    let bars = '', line = [];
+    tr.forEach((x, i) => {
+      const hgt = (x.n / maxN) * (H - 34);
+      bars += `<rect x="${(pad + i * bw + bw * 0.18).toFixed(1)}" y="${(H - 18 - hgt).toFixed(1)}" width="${(bw * 0.64).toFixed(1)}" height="${Math.max(0, hgt).toFixed(1)}" rx="2.5" fill="${x.n ? '#F4C0CE' : '#F7E7EC'}"/>`;
+      if (x.rate != null) line.push([pad + i * bw + bw / 2, H - 18 - x.rate * (H - 34)]);
+    });
+    const pl = line.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ');
+    const dots = line.map((p) => `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="2.4" fill="#D95C83"/>`).join('');
+    return `<svg class="chart" viewBox="0 0 ${W} ${H}">${bars}
+      <path d="${pl}" fill="none" stroke="#D95C83" stroke-width="1.8" stroke-linejoin="round"/>${dots}
+      <text x="${pad}" y="${H - 4}" font-size="9" fill="#A3909A">${tr[0].date}</text>
+      <text x="${W - pad}" y="${H - 4}" font-size="9" fill="#A3909A" text-anchor="end">${tr[tr.length - 1].date}</text></svg>
+      <p class="hint">柱：每日题量　线：当日正确率</p>`;
+  }
+  function srcListHTML() {
+    const s = ST.load();
+    if (!s.sources.length) return '<p class="hint">还没有订阅源。添加一个返回 JSON 题包的地址，即可自动同步最新题目。</p>';
+    return s.sources.map((x) => `<div class="src-row">
+      <div class="m"><b>${esc(x.name)}</b><span>${esc(x.url)} · 已同步 ${x.count || 0} 题 · ${x.lastSync ? new Date(x.lastSync).toLocaleString('zh-CN') : '未同步'}</span></div>
+      <div class="switch ${x.enabled ? 'on' : ''}" data-src="${esc(x.url)}"><i></i></div>
+      <button class="btn line sm" data-act="delsrc" data-u="${esc(x.url)}">删除</button></div>`).join('');
+  }
+
+  /* ---------------- 答题流程 ---------------- */
+  let quiz = null;
+  function startQuiz(list, title) {
+    if (!list.length) { toast('没有可用的题目'); return; }
+    quiz = { list, i: 0, title, t0: Date.now(), perT: Date.now(), answered: false, results: [] };
+    $('#quizSheet').hidden = false;
+    $('#navTitle').textContent = title;
+    renderQuestion();
+  }
+  function getQ(qid) {
+    // 支持引擎题（type-seed-diff）与外部题
+    if (ST.load().custom.some((q) => q.id === qid)) return ST.load().custom.find((q) => q.id === qid);
+    const m = /^(\w+)-(\d+)-(\w+)$/.exec(qid);
+    if (m) return QS.build(m[1], +m[2], m[3]);
+    return null;
+  }
+  function renderQuestion() {
+    const q = quiz.list[quiz.i];
+    quiz.perT = Date.now(); quiz.answered = false;
+    const body = $('#quizBody');
+    const isCustom = !/^(\w+)-(\d+)-(\w+)$/.test(q.id);
+    body.innerHTML = `
+      <div class="q-stem anim">
+        <div class="qt">${esc(q.stemText || '请选择正确答案')}</div>
+        ${q.stem ? `<div class="figwrap">${q.stem}</div>` : ''}
+        <div class="q-tags">
+          <span class="tag">${esc(q.typeCn || (QS.TYPE_INFO[q.type] || {}).cn || '题')}</span>
+          <span class="tag ${q.diff === 'hard' ? 'o' : ''}">${{ easy: '入门', normal: '标准', hard: '进阶' }[q.diff] || q.diff}</span>
+          ${(q.tags || []).slice(0, 3).map((t) => `<span class="tag">${esc(t)}</span>`).join('')}
+          ${q.source ? `<span class="tag g">${esc(q.source)}</span>` : ''}
+        </div>
+      </div>
+      <div class="opts" id="optBox">
+        ${q.options.map((o, i) => `<button class="opt" data-i="${i}"><span class="lb">${'ABCD'[i]}</span>${o}</button>`).join('')}
+      </div>
+      <div id="expBox"></div>`;
+    $('#qIndex').textContent = (quiz.i + 1) + '/' + quiz.list.length;
+    $('#qBar').style.width = ((quiz.i) / quiz.list.length * 100) + '%';
+    $('#quizFoot').innerHTML = `<div class="inner"><button class="btn block" id="nextBtn" disabled>选择答案</button></div>`;
+    $$('#optBox .opt').forEach((b) => {
+      b.onclick = () => choose(+b.dataset.i, q);
+    });
+    startTimer();
+  }
+  let timerH = null;
+  function startTimer() {
+    clearInterval(timerH);
+    const el = $('#qTimer');
+    if (!ST.load().settings.showTimer) { el.textContent = ''; return; }
+    const t0 = Date.now();
+    const tick = () => {
+      const s = Math.floor((Date.now() - t0) / 1000);
+      el.textContent = String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+    };
+    tick(); timerH = setInterval(tick, 500);
+  }
+  function choose(i, q) {
+    if (quiz.answered) return;
+    quiz.answered = true;
+    clearInterval(timerH);
+    const ms = Date.now() - quiz.perT;
+    const ok = i === q.answer;
+    const res = ST.record(q, i, ms);
+    $$('#optBox .opt').forEach((b, j) => {
+      if (j === q.answer) b.classList.add('right');
+      else if (j === i) b.classList.add('wrong');
+      else b.classList.add('dim');
+    });
+    quiz.results.push(ok);
+    const methods = (q.methods || []).map((m) => MT.byId[m]).filter(Boolean);
+    $('#expBox').innerHTML = `<div class="explain anim">
+      <div class="eh">${ok ? '<span class="badge ok">回答正确</span>' : '<span class="badge bad">回答错误</span>'}
+        <span>用时 ${(ms / 1000).toFixed(1)}s${res.wrong ? ' · 错题本第 ' + res.wrong.n + ' 次' : ''}</span></div>
+      ${esc(q.explain || '暂无解析')}
+      ${methods.length ? `<div class="mrow">${methods.map((m) => `<button class="btn line sm" data-act="mopen" data-m="${m.id}">📖 ${esc(m.name)}</button>`).join('')}</div>` : ''}
+      <div class="mrow">
+        <button class="btn line sm" data-act="mark" data-q="${esc(q.id)}">${ST.isMarked(q.id) ? '★ 已收藏' : '☆ 收藏'}</button>
+        <button class="btn line sm" data-act="note" data-q="${esc(q.id)}">✎ 笔记</button>
+      </div>
+    </div>`;
+    const btn = $('#nextBtn');
+    btn.disabled = false;
+    btn.textContent = quiz.i + 1 >= quiz.list.length ? '查看报告 ✓' : '下一题 →';
+    btn.onclick = () => nextQ();
+    if (ST.load().settings.autoNext && ok) setTimeout(() => { if (quiz && quiz.answered) nextQ(); }, 900);
+    $('#quizFoot').scrollTop = 0;
+    $('#quizBody').scrollTo({ top: 99999, behavior: 'smooth' });
+  }
+  function nextQ() {
+    if (quiz.i + 1 >= quiz.list.length) return finishQuiz();
+    quiz.i++;
+    renderQuestion();
+    $('#quizBody').scrollTo({ top: 0 });
+  }
+  function finishQuiz() {
+    const r = quiz.results, ok = r.filter(Boolean).length, n = r.length;
+    const total = Date.now() - quiz.t0;
+    $('#quizBody').innerHTML = `<div class="card anim" style="text-align:center;padding:26px 18px">
+      <div style="font-size:44px">${ok / n >= 0.8 ? '🎉' : ok / n >= 0.6 ? '💪' : '📚'}</div>
+      <h2 style="font-size:22px;margin:8px 0 4px">正确率 ${pct(ok / n)}</h2>
+      <p class="hint">${ok}/${n} 题 · 总用时 ${fmtTime(total)} · 平均 ${(total / n / 1000).toFixed(1)}s/题</p>
+      <div class="btn-row" style="margin-top:18px">
+        <button class="btn" id="qAgain">再来一组</button>
+        <button class="btn ghost" id="qReview">看学情分析</button>
+      </div>
+      <div class="btn-row" style="margin-top:10px"><button class="btn line" id="qClose">返回</button></div>
+    </div>`;
+    $('#quizFoot').innerHTML = '<div class="inner"><button class="btn block" id="qClose2">完成</button></div>';
+    $('#qAgain').onclick = () => { closeQuiz(); start('quick', null, '快速练习'); };
+    $('#qReview').onclick = () => { closeQuiz(); document.querySelector('[data-tab="review"]').click(); };
+    $('#qClose').onclick = closeQuiz;
+    $('#qClose2').onclick = closeQuiz;
+    $('#qBar').style.width = '100%';
+  }
+
+  /* ---------------- 组卷 ---------------- */
+  function buildSet(kind, param) {
+    const custom = ST.customByType();
+    if (kind === 'quick') return QS.makeSet(TYPES, 20, (Math.random() * 1e6) | 0, null);
+    if (kind === 'assess') return QS.makeSet(TYPES, 12, 9001, 'normal');
+    if (kind === 'daily') {
+      const day = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+      return QS.makeSet(TYPES, 30, +day % 100000, null);
+    }
+    if (kind === 'type') return QS.makeSet([param], 20, (Math.random() * 1e6) | 0, null);
+    if (kind === 'method') {
+      const m = MT.byId[param];
+      const ts = m.types.length ? m.types : TYPES;
+      return QS.makeSet(ts, 15, (Math.random() * 1e6) | 0, null);
+    }
+    if (kind === 'path') {
+      const p = MT.PATHS.find((x) => x.id === param);
+      return QS.makeSet(p.types, 18, (Math.random() * 1e6) | 0, null);
+    }
+    if (kind === 'review') {
+      const q = ST.reviewQueue(20).map((w) => getQ(w.qid)).filter(Boolean);
+      return q;
+    }
+    if (kind === 'reviewall') {
+      return ST.wrongList().filter((w) => !w.mastered).map((w) => getQ(w.qid)).filter(Boolean).slice(0, 40);
+    }
+    if (kind === 'custom') return custom;
+    return QS.makeSet(TYPES, 20, 1, null);
+  }
+  let lastKind = null;
+  function start(kind, param, title) {
+    lastKind = { kind, param, title };
+    const list = buildSet(kind, param);
+    if (!list.length) { toast('暂无题目'); return; }
+    startQuiz(list, title);
+  }
+
+  /* ---------------- 更新中心 ---------------- */
+  const BANK_VERSION = '1.4.0';
+  function bankInfo() {
+    const s = ST.load();
+    return `<p class="hint">内置题库采用<b>程序化生成</b>：几何引擎按六大考点规律出题，答案由模型计算，因此题量无上限且不会出现答案错误。<br><br>
+      当前版本 <b>v${BANK_VERSION}</b><br>
+      · 折纸盒 / 拆纸盒：覆盖立方体全部 <b>11 种</b>展开图<br>
+      · 三视图：主视 / 俯视 / 左视 / 右视 / 后视 随机<br>
+      · 截面图：8 种切面 + 一刀切原则校验<br>
+      · 堆积拼合：俯视图数字 ↔ 立体<br>
+      · 空间旋转：绕三轴顺 / 逆时针<br><br>
+      本地自定义题目：<b>${s.custom.length}</b> 题</p>`;
+  }
+  function entryForm() {
+    return `<div class="field"><label>题干文字</label><textarea id="efStem" placeholder="例如：左边给定的是纸盒的外表面展开图，右边哪一项能由它折叠而成？"></textarea></div>
+      <div class="field"><label>题干图形（可选：上传图片或粘贴 SVG）</label>
+        <input type="file" id="efStemImg" accept="image/*">
+        <textarea id="efStemSvg" placeholder="&lt;svg ...&gt;&lt;/svg&gt;（可选）" style="min-height:56px;margin-top:6px"></textarea></div>
+      <div class="field"><label>题型</label><select id="efType">${TYPES.map((t) => `<option value="${t}">${QS.TYPE_INFO[t].cn}</option>`).join('')}<option value="custom">其他</option></select></div>
+      <div class="field"><label>难度</label><select id="efDiff"><option value="normal">标准</option><option value="easy">入门</option><option value="hard">进阶</option></select></div>
+      <div id="efOpts"></div>
+      <button class="btn line sm" id="efAdd" style="margin-bottom:10px">＋ 增加一个选项</button>
+      <div class="field"><label>正确答案</label><select id="efAns"></select></div>
+      <div class="field"><label>解析 / 解题技巧</label><textarea id="efExp"></textarea></div>
+      <div class="field"><label>关联技巧（可多选）</label><div id="efMethods" style="display:flex;flex-wrap:wrap;gap:6px">${MT.METHODS.map((m) => `<label style="font-size:12px;background:var(--pink-50);padding:5px 10px;border-radius:9px"><input type="checkbox" value="${m.id}"> ${m.name}</label>`).join('')}</div></div>
+      <div class="field"><label>来源备注（年份 / 省份 / 场次）</label><input id="efSrc" placeholder="如：2025 国考 · 网友回忆版"></div>
+      <button class="btn block" id="efSave">保存到题库</button>`;
+  }
+  let optCount = 4, optImgs = [null, null, null, null], stemImg = null;
+  function renderEntryOpts(box) {
+    box.innerHTML = '';
+    for (let i = 0; i < optCount; i++) {
+      const d = document.createElement('div');
+      d.className = 'field';
+      d.innerHTML = `<label>选项 ${'ABCD'[i]}</label>
+        <input class="eo-t" data-i="${i}" placeholder="文字（如图形题可留空）">
+        <input type="file" class="eo-f" data-i="${i}" accept="image/*" style="margin-top:6px">
+        <textarea class="eo-s" data-i="${i}" placeholder="或粘贴 SVG" style="min-height:44px;margin-top:6px"></textarea>`;
+      box.appendChild(d);
+    }
+    $('#efAns').innerHTML = Array.from({ length: optCount }, (_, i) => `<option value="${i}">${'ABCD'[i]}</option>`).join('');
+    $$('.eo-f', box).forEach((f) => {
+      f.onchange = () => {
+        const r = new FileReader();
+        r.onload = () => { optImgs[+f.dataset.i] = r.result; toast('图片已就绪'); };
+        r.readAsDataURL(f.files[0]);
+      };
+    });
+  }
+  function saveEntry(box) {
+    const stemText = $('#efStem').value.trim();
+    const stemSvg = $('#efStemSvg').value.trim();
+    const opts = [];
+    for (let i = 0; i < optCount; i++) {
+      const t = ($(`.eo-t[data-i="${i}"]`).value || '').trim();
+      const s = ($(`.eo-s[data-i="${i}"]`).value || '').trim();
+      let html = '';
+      if (s) html = s;
+      else if (optImgs[i]) html = `<img src="${optImgs[i]}" style="max-width:100%;border-radius:8px">`;
+      else if (t) html = `<div style="padding:14px;text-align:center;font-size:15px">${esc(t)}</div>`;
+      opts.push(html);
+    }
+    if (opts.filter((x) => x).length < 2) { toast('至少填 2 个选项'); return; }
+    let stem = '';
+    if (stemSvg) stem = stemSvg;
+    else if (stemImg) stem = `<img src="${stemImg}" style="max-width:100%;border-radius:8px">`;
+    const type = $('#efType').value;
+    const methods = $$('#efMethods input:checked').map((x) => x.value);
+    const q = {
+      id: 'custom-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5),
+      type, typeCn: (QS.TYPE_INFO[type] || {}).cn || '自定义',
+      diff: $('#efDiff').value, stemText, stem,
+      options: opts, answer: +$('#efAns').value,
+      explain: $('#efExp').value.trim(), methods,
+      tags: ['自录'], source: $('#efSrc').value.trim() || '手动录入'
+    };
+    ST.addCustom([q], q.source);
+    toast('已保存到题库');
+    closeModal();
+  }
+
+  async function syncSources(quiet) {
+    const s = ST.load();
+    const list = s.sources.filter((x) => x.enabled);
+    if (!list.length) { if (!quiet) toast('没有启用的订阅源'); return 0; }
+    let total = 0;
+    for (const src of list) {
+      try {
+        const r = await fetch(src.url, { cache: 'no-store' });
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        const data = await r.json();
+        const qs = Array.isArray(data) ? data : (data.questions || []);
+        const n = ST.addCustom(qs, src.name);
+        ST.markSource(src.url, n);
+        total += n;
+      } catch (e) {
+        if (!quiet) toast('同步失败：' + src.name + ' · ' + e.message);
+      }
+    }
+    if (total && !quiet) toast('同步完成，新增 ' + total + ' 题');
+    else if (!total && !quiet) toast('没有新增题目');
+    if (total) refresh();
+    return total;
+  }
+
+  /* ---------------- 渲染 / 事件 ---------------- */
+  function refresh() {
+    const main = $('#main');
+    if (cur === 'practice') { main.innerHTML = pagePractice(); $('#navTitle').textContent = '练习'; $('#navSub').textContent = '行测空间推理专项'; }
+    else if (cur === 'lab') { main.innerHTML = pageLab(); $('#navTitle').textContent = '3D 实验室'; $('#navSub').textContent = '折叠 · 拆解 · 三视图 · 截面'; mountLab('fold'); }
+    else if (cur === 'methods') { main.innerHTML = pageMethods(); $('#navTitle').textContent = '解题技巧'; $('#navSub').textContent = '通用 · 高效 · 有判据'; }
+    else if (cur === 'review') { main.innerHTML = pageReview(); $('#navTitle').textContent = '错题与学情'; $('#navSub').textContent = '自动归纳 · 薄弱诊断'; }
+    else if (cur === 'me') { main.innerHTML = pageMe(); $('#navTitle').textContent = '我的'; $('#navSub').textContent = '数据与题库更新'; }
+    bindMain();
+  }
+
+  function bindMain() {
+    $$('#main [data-act]').forEach((b) => {
+      b.onclick = (e) => {
+        e.stopPropagation();
+        const a = b.dataset.act;
+        if (a === 'quick') start('quick', null, '快速练习');
+        else if (a === 'assess') start('assess', null, '摸底测');
+        else if (a === 'daily') start('daily', null, '每日一练');
+        else if (a === 'review') start('review', null, '错题复习');
+        else if (a === 'reviewall') start('reviewall', null, '错题全练');
+        else if (a === 'type') start('type', b.dataset.t, QS.TYPE_INFO[b.dataset.t].cn + '专项');
+        else if (a === 'mdrill') start('method', b.dataset.m, (MT.byId[b.dataset.m] || {}).name + '专项');
+        else if (a === 'pathdrill') start('path', b.dataset.p, (MT.PATHS.find((x) => x.id === b.dataset.p) || {}).name);
+        else if (a === 'redo') { const q = getQ(b.dataset.q); if (q) startQuiz([q], '重做错题'); }
+        else if (a === 'mdone') {
+          const s = ST.load(); s.methods = s.methods || {};
+          const m = b.dataset.m;
+          if (s.methods[m] && s.methods[m].read) delete s.methods[m].read; else { s.methods[m] = s.methods[m] || {}; s.methods[m].read = true; }
+          ST.save(); refresh();
+        }
+        else if (a === 'mopen') openMethod(b.dataset.m);
+        else if (a === 'builtin') modal('内置题库', bankInfo());
+        else if (a === 'importq') openEntry();
+        else if (a === 'impjson') openImport();
+        else if (a === 'addsrc') openSrc();
+        else if (a === 'syncnow') syncSources(false);
+        else if (a === 'delsrc') { ST.removeSource(b.dataset.u); refresh(); toast('已删除'); }
+        else if (a === 'exp') exportData();
+        else if (a === 'imp') openImportBackup();
+        else if (a === 'reset') confirmReset();
+      };
+    });
+    // 技巧卡展开
+    $$('#main .m-card').forEach((c) => {
+      $('.m-head', c).onclick = () => {
+        const b = $('.m-body', c);
+        b.hidden = !b.hidden;
+        c.classList.toggle('open', !b.hidden);
+      };
+    });
+    // 开关
+    $$('#main [data-sw]').forEach((sw) => {
+      sw.onclick = () => {
+        const s = ST.load();
+        s.settings[sw.dataset.sw] = !s.settings[sw.dataset.sw];
+        ST.save();
+        sw.classList.toggle('on', s.settings[sw.dataset.sw]);
+      };
+    });
+    $$('#main [data-src]').forEach((sw) => {
+      sw.onclick = () => {
+        const s = ST.load();
+        const x = s.sources.find((y) => y.url === sw.dataset.src);
+        if (x) { x.enabled = !x.enabled; ST.save(); sw.classList.toggle('on', x.enabled); }
+      };
+    });
+    const g = $('#setGoal');
+    if (g) g.onchange = () => { const s = ST.load(); s.settings.dailyGoal = Math.max(5, Math.min(200, +g.value || 20)); ST.save(); refresh(); };
+    // 实验室切换
+    const seg = $('#labSeg');
+    if (seg) $$('button', seg).forEach((b) => b.onclick = () => {
+      $$('button', seg).forEach((x) => x.classList.remove('on'));
+      b.classList.add('on'); mountLab(b.dataset.l);
+    });
+  }
+
+  function openMethod(id) {
+    const m = MT.byId[id];
+    if (!m) return;
+    modal(m.name, `<div class="hint" style="font-size:13.5px;line-height:1.8">
+      <b>什么时候用：</b>${esc(m.when)}<br><br>
+      <b>步骤：</b><br>${m.steps.map((x, i) => (i + 1) + '. ' + x.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')).join('<br>')}<br><br>
+      <div class="chant">${esc(m.chant)}</div>
+      <div class="trap"><b>易错：</b>${esc(m.trap)}</div></div>
+      <div class="btn-row" style="margin-top:12px"><button class="btn block" data-act="mdrill" data-m="${m.id}">练这个方法的题</button></div>`);
+  }
+  function openEntry() {
+    optCount = 4; optImgs = [null, null, null, null]; stemImg = null;
+    modal('录入新题', entryForm(), (box) => {
+      renderEntryOpts($('#efOpts'));
+      $('#efStemImg').onchange = () => {
+        const r = new FileReader();
+        r.onload = () => { stemImg = r.result; toast('题干图片已就绪'); };
+        r.readAsDataURL($('#efStemImg').files[0]);
+      };
+      $('#efAdd').onclick = () => { if (optCount < 6) { optCount++; renderEntryOpts($('#efOpts')); } };
+      $('#efSave').onclick = () => saveEntry(box);
+    });
+  }
+  function openImport() {
+    modal('导入 JSON 题包', `<p class="hint" style="margin-bottom:10px">题包格式：<code>[{"type":"fold","stemText":"...","options":["&lt;svg&gt;..",".."],"answer":1,"explain":"...","methods":["arrow"]}]</code><br>也可直接粘贴 <code>{"questions":[...]}</code>。</p>
+      <div class="field"><textarea id="ijT" style="min-height:180px" placeholder='[{"type":"fold","stemText":"题干","options":["A图svg","B图svg","C图svg","D图svg"],"answer":2,"explain":"解析"}]'></textarea></div>
+      <button class="btn block" id="ijGo">导入</button>
+      <div class="field" style="margin-top:12px"><label>或上传 .json 文件</label><input type="file" id="ijF" accept=".json,application/json"></div>`,
+      () => {
+        $('#ijGo').onclick = () => {
+          try { const n = ST.addCustom(JSON.parse($('#ijT').value), '导入题包'); toast('导入 ' + n + ' 题'); closeModal(); refresh(); }
+          catch (e) { toast('格式错误：' + e.message); }
+        };
+        $('#ijF').onchange = () => {
+          const r = new FileReader();
+          r.onload = () => { try { const n = ST.addCustom(JSON.parse(r.result), '导入题包'); toast('导入 ' + n + ' 题'); closeModal(); refresh(); } catch (e) { toast('格式错误'); } };
+          r.readAsText($('#ijF').files[0]);
+        };
+      });
+  }
+  function openSrc() {
+    modal('添加题库订阅源', `<div class="field"><label>名称</label><input id="sfN" placeholder="如：我的真题库"></div>
+      <div class="field"><label>JSON 地址</label><input id="sfU" placeholder="https://.../questions.json"></div>
+      <p class="hint">返回内容需为题目数组或含 questions 字段的对象。开启"自动同步"后，每次启动会自动拉取新题并去重录入。</p>
+      <button class="btn block" id="sfGo" style="margin-top:12px">添加并同步</button>`, () => {
+      $('#sfGo').onclick = async () => {
+        const u = $('#sfU').value.trim();
+        if (!u) return toast('请填写地址');
+        ST.addSource(u, $('#sfN').value.trim() || u);
+        closeModal(); refresh();
+        syncSources(false);
+      };
+    });
+  }
+  function exportData() {
+    const blob = new Blob([ST.exportAll()], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = '立体图形特训-备份-' + new Date().toISOString().slice(0, 10) + '.json';
+    a.click();
+    toast('已导出');
+  }
+  function openImportBackup() {
+    modal('导入备份', `<div class="field"><textarea id="ibT" style="min-height:160px" placeholder="粘贴此前导出的 JSON"></textarea></div>
+      <button class="btn block" id="ibGo">导入并覆盖</button>`, () => {
+      $('#ibGo').onclick = () => {
+        try { ST.importAll($('#ibT').value); toast('已导入'); closeModal(); refresh(); }
+        catch (e) { toast('格式错误'); }
+      };
+    });
+  }
+  function confirmReset() {
+    modal('确认清空', `<p class="hint">将删除全部答题记录、错题本、自定义题目与设置，且不可恢复。</p>
+      <div class="btn-row" style="margin-top:14px"><button class="btn ghost" data-close>取消</button><button class="btn" id="rsGo" style="background:var(--bad)">确认清空</button></div>`,
+      () => { $('#rsGo').onclick = () => { ST.reset(); closeModal(); refresh(); toast('已清空'); }; });
+  }
+
+  /* ---------------- 全局事件 ---------------- */
+  $$('#tabbar .tab').forEach((t) => {
+    t.onclick = () => {
+      if (!$('#quizSheet').hidden) { closeQuiz(); }
+      if (labCtrl && labCtrl.destroy) { labCtrl.destroy(); labCtrl = null; }
+      $$('#tabbar .tab').forEach((x) => x.classList.remove('active'));
+      t.classList.add('active');
+      cur = t.dataset.tab;
+      $('#main').scrollTop = 0;
+      window.scrollTo({ top: 0 });
+      refresh();
+    };
+  });
+  $('#quizClose').onclick = closeQuiz;
+  function closeQuiz() {
+    $('#quizSheet').hidden = true;
+    clearInterval(timerH);
+    quiz = null;
+    refresh();
+  }
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('[data-close]')) closeModal();
+  });
+  document.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-act]');
+    if (!b || !b.closest('#modal')) return;
+    if (b.dataset.act === 'mdrill') { closeModal(); start('method', b.dataset.m, (MT.byId[b.dataset.m] || {}).name + '专项'); }
+  });
+  window.addEventListener('resize', () => { if (labCtrl && labCtrl.resize) labCtrl.resize(); });
+
+  /* ---------------- 启动 ---------------- */
+  function boot() {
+    refresh();
+    const s = ST.load();
+    if (s.settings.autoSync && s.sources.length) setTimeout(() => syncSources(true), 1200);
+    if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+      navigator.serviceWorker.register('sw.js').catch(() => { });
+    }
+  }
+  boot();
+})();
+
+;
+</script>
+</body>
+</html>
