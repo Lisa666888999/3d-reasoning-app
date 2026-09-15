@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#FDF6F8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="立体图形特训">
+<title>立体图形特训 · 行测空间推理</title>
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body>
+<div id="app">
+  <header class="nav" id="nav">
+    <div class="nav-inner">
+      <h1 id="navTitle">立体图形特训</h1>
+      <div class="nav-sub" id="navSub">行测空间推理专项</div>
+    </div>
+  </header>
+
+  <main id="main"></main>
+
+  <nav class="tabbar" id="tabbar">
+    <button class="tab active" data-tab="practice"><span class="ti">✏️</span><span>练习</span></button>
+    <button class="tab" data-tab="lab"><span class="ti">🧊</span><span>实验室</span></button>
+    <button class="tab" data-tab="methods"><span class="ti">📖</span><span>技巧</span></button>
+    <button class="tab" data-tab="review"><span class="ti">📊</span><span>错题</span></button>
+    <button class="tab" data-tab="me"><span class="ti">⚙️</span><span>我的</span></button>
+  </nav>
+</div>
+
+<!-- 答题页 -->
+<div class="sheet" id="quizSheet" hidden>
+  <div class="sheet-head">
+    <button class="icon-btn" id="quizClose">✕</button>
+    <div class="q-progress"><div class="q-bar" id="qBar"></div></div>
+    <div class="q-meta"><span id="qIndex">1/20</span><span id="qTimer">00:00</span></div>
+  </div>
+  <div class="sheet-body" id="quizBody"></div>
+  <div class="sheet-foot" id="quizFoot"></div>
+</div>
+
+<!-- 通用弹层 -->
+<div class="modal" id="modal" hidden>
+  <div class="modal-mask" data-close></div>
+  <div class="modal-box">
+    <div class="modal-head"><h3 id="modalTitle"></h3><button class="icon-btn" data-close>✕</button></div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<script src="assets/js/core3d.js"></script>
+<script src="assets/js/cube.js"></script>
+<script src="assets/js/patterns.js"></script>
+<script src="assets/js/render.js"></script>
+<script src="assets/js/questions.js"></script>
+<script src="assets/js/methods.js"></script>
+<script src="assets/js/store.js"></script>
+<script src="assets/js/lab.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
